@@ -2,6 +2,9 @@
 bin/
 obj/
 .vs/
+API/bin/
+API/obj/
+API/.vs/
 *.user
 *.suo
 *.cache
