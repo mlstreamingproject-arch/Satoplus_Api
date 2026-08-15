@@ -1,0 +1,16 @@
+# Visual Studio / .NET
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.cache
+*.pdb
+*.log
+
+# Package restore
+packages/
+
+# OS files
+Thumbs.db
+.DS_Store
