@@ -372,7 +372,7 @@ namespace MeuProxySsl.Data
 
         public int CreateUser(User model)
         {
-            var query = "INSERT INTO user_backup (Id, Name, Username, Password, Email, MobilePhone, External_Id, Creation_Date, Is_Active) VALUES (@Id, @Name, @Username, @Password, @Email, @MobilePhone, @External_Id, @Creation_Date, @IsActive)";
+            var query = "INSERT INTO user_backup (Id, Name, Username, Password, Email, MobilePhone, External_Id, Creation_Date, Last_Login, Is_Active) VALUES (@Id, @Name, @Username, @Password, @Email, @MobilePhone, @External_Id, @Creation_Date, @Last_Login, @IsActive)";
             ExecuteNonQuery(query,
                 new MySqlParameter("@Id", model.Id),
                 new MySqlParameter("@Name", model.Name ?? ""),
@@ -382,6 +382,7 @@ namespace MeuProxySsl.Data
                 new MySqlParameter("@MobilePhone", model.MobilePhone ?? ""),
                 new MySqlParameter("@External_Id", model.External_Id ?? ""),
                 new MySqlParameter("@Creation_Date", model.Creation_Date ?? DateTime.Now),
+                new MySqlParameter("@Last_Login", model.Last_Login ?? (object)DBNull.Value),
                 new MySqlParameter("@IsActive", model.IsActive ?? true)
             );
             return model.Id;
@@ -507,7 +508,7 @@ namespace MeuProxySsl.Data
             ExecuteNonQuery(query,
                 new MySqlParameter("@Id", model.Id),
                 new MySqlParameter("@UserId", model.UserId ?? 0),
-                new MySqlParameter("@UserPerfilId", model.UserPerfilId ?? 0),
+                new MySqlParameter("@UserPerfilId", model.UserPerfilId ?? (object)DBNull.Value),
                 new MySqlParameter("@PlataformTypeId", model.PlataformTypeId ?? ""),
                 new MySqlParameter("@IP", model.IP ?? ""),
                 new MySqlParameter("@CreatedOn", model.CreatedOn ?? DateTime.Now)
@@ -577,7 +578,7 @@ namespace MeuProxySsl.Data
 
         public long CreateUserAvatar(UserAvatar model)
         {
-            var query = "INSERT INTO useravatar_backup (Id, Name, binaryData, IsActive, Description, CreatedOn, CreatedBy) VALUES (@Id, @Name, @BinaryData, @IsActive, @Description, @CreatedOn, @CreatedBy)";
+            var query = "INSERT INTO useravatar_backup (Id, Name, binaryData, IsActive, Description, CreatedOn, CreatedBy, UpdatedOn, UpdatedBy) VALUES (@Id, @Name, @BinaryData, @IsActive, @Description, @CreatedOn, @CreatedBy, @UpdatedOn, @UpdatedBy)";
             ExecuteNonQuery(query,
                 new MySqlParameter("@Id", model.Id),
                 new MySqlParameter("@Name", model.Name ?? ""),
@@ -585,7 +586,9 @@ namespace MeuProxySsl.Data
                 new MySqlParameter("@IsActive", model.IsActive ?? true),
                 new MySqlParameter("@Description", model.Description ?? ""),
                 new MySqlParameter("@CreatedOn", model.CreatedOn ?? DateTime.Now),
-                new MySqlParameter("@CreatedBy", model.CreatedBy ?? 0)
+                new MySqlParameter("@CreatedBy", model.CreatedBy ?? 0),
+                new MySqlParameter("@UpdatedOn", model.UpdatedOn ?? (object)DBNull.Value),
+                new MySqlParameter("@UpdatedBy", model.UpdatedBy ?? (object)DBNull.Value)
             );
             return model.Id;
         }
@@ -852,7 +855,7 @@ namespace MeuProxySsl.Data
 
         public long CreateUserInitialRegistration(UserInitialRegistration model)
         {
-            var query = "INSERT INTO userinitialregistration_backup (Id, Status, Email, PlataformTypeId, IP, Token, CreatedOn, RegionName, City, Country, v_OS, v_Browser, Deeplink, Password) VALUES (@Id, @Status, @Email, @PlataformTypeId, @IP, @Token, @CreatedOn, @RegionName, @City, @Country, @V_OS, @V_Browser, @Deeplink, @Password)";
+            var query = "INSERT INTO userinitialregistration_backup (Id, Status, Email, PlataformTypeId, IP, Token, CreatedOn, UpdateOn, RegionName, City, Country, v_OS, v_Browser, Deeplink, Password) VALUES (@Id, @Status, @Email, @PlataformTypeId, @IP, @Token, @CreatedOn, @UpdateOn, @RegionName, @City, @Country, @V_OS, @V_Browser, @Deeplink, @Password)";
             ExecuteNonQuery(query,
                 new MySqlParameter("@Id", model.Id),
                 new MySqlParameter("@Status", model.Status ?? false),
@@ -861,6 +864,7 @@ namespace MeuProxySsl.Data
                 new MySqlParameter("@IP", model.IP ?? ""),
                 new MySqlParameter("@Token", model.Token ?? ""),
                 new MySqlParameter("@CreatedOn", model.CreatedOn ?? DateTime.Now),
+                new MySqlParameter("@UpdateOn", model.UpdateOn ?? (object)DBNull.Value),
                 new MySqlParameter("@RegionName", model.RegionName ?? ""),
                 new MySqlParameter("@City", model.City ?? ""),
                 new MySqlParameter("@Country", model.Country ?? ""),
@@ -1003,7 +1007,7 @@ namespace MeuProxySsl.Data
 
         public long CreateUserPerfil(UserPerfil model)
         {
-            var query = "INSERT INTO userperfil_backup (Id, UserId, IsActive, Name, UserAvatarId, IsChild, IsMain, CreatedOn) VALUES (@Id, @UserId, @IsActive, @Name, @UserAvatarId, @IsChild, @IsMain, @CreatedOn)";
+            var query = "INSERT INTO userperfil_backup (Id, UserId, IsActive, Name, UserAvatarId, IsChild, IsMain, CreatedOn, DeletedOn) VALUES (@Id, @UserId, @IsActive, @Name, @UserAvatarId, @IsChild, @IsMain, @CreatedOn, @DeletedOn)";
             ExecuteNonQuery(query,
                 new MySqlParameter("@Id", model.Id),
                 new MySqlParameter("@UserId", model.UserId ?? 0),
@@ -1012,7 +1016,8 @@ namespace MeuProxySsl.Data
                 new MySqlParameter("@UserAvatarId", model.UserAvatarId ?? 0),
                 new MySqlParameter("@IsChild", model.IsChild ?? false),
                 new MySqlParameter("@IsMain", model.IsMain ?? false),
-                new MySqlParameter("@CreatedOn", model.CreatedOn ?? DateTime.Now)
+                new MySqlParameter("@CreatedOn", model.CreatedOn ?? DateTime.Now),
+                new MySqlParameter("@DeletedOn", model.DeletedOn ?? (object)DBNull.Value)
             );
             return model.Id;
         }
@@ -1134,13 +1139,15 @@ namespace MeuProxySsl.Data
 
         public long CreateUserPosition(UserPosition model)
         {
-            var query = "INSERT INTO userposition_backup (Id, UserId, PositionId, CreatedOn, CreatedBy) VALUES (@Id, @UserId, @PositionId, @CreatedOn, @CreatedBy)";
+            var query = "INSERT INTO userposition_backup (Id, UserId, PositionId, CreatedOn, CreatedBy, UpdatedOn, UpdatedBy) VALUES (@Id, @UserId, @PositionId, @CreatedOn, @CreatedBy, @UpdatedOn, @UpdatedBy)";
             ExecuteNonQuery(query,
                 new MySqlParameter("@Id", model.Id),
                 new MySqlParameter("@UserId", model.UserId ?? 0),
                 new MySqlParameter("@PositionId", model.PositionId ?? 0),
                 new MySqlParameter("@CreatedOn", model.CreatedOn ?? DateTime.Now),
-                new MySqlParameter("@CreatedBy", model.CreatedBy ?? 0)
+                new MySqlParameter("@CreatedBy", model.CreatedBy ?? 0),
+                new MySqlParameter("@UpdatedOn", model.UpdatedOn ?? (object)DBNull.Value),
+                new MySqlParameter("@UpdatedBy", model.UpdatedBy ?? (object)DBNull.Value)
             );
             return model.Id;
         }
@@ -1262,14 +1269,16 @@ namespace MeuProxySsl.Data
 
         public long CreateConfiguration(ConfigurationModel model)
         {
-            var query = "INSERT INTO configurations_backup (Id, Name, Description, Value, CreatedOn, CreatedBy) VALUES (@Id, @Name, @Description, @Value, @CreatedOn, @CreatedBy)";
+            var query = "INSERT INTO configurations_backup (Id, Name, Description, Value, CreatedOn, CreatedBy, UpdateOn, UpdateBy) VALUES (@Id, @Name, @Description, @Value, @CreatedOn, @CreatedBy, @UpdateOn, @UpdateBy)";
             ExecuteNonQuery(query,
                 new MySqlParameter("@Id", model.Id),
                 new MySqlParameter("@Name", model.Name ?? ""),
                 new MySqlParameter("@Description", model.Description ?? ""),
                 new MySqlParameter("@Value", model.Value ?? ""),
                 new MySqlParameter("@CreatedOn", model.CreatedOn ?? DateTime.Now),
-                new MySqlParameter("@CreatedBy", model.CreatedBy ?? 0)
+                new MySqlParameter("@CreatedBy", model.CreatedBy ?? 0),
+                new MySqlParameter("@UpdateOn", model.UpdateOn ?? (object)DBNull.Value),
+                new MySqlParameter("@UpdateBy", model.UpdateBy ?? (object)DBNull.Value)
             );
             return model.Id;
         }
@@ -1341,7 +1350,7 @@ namespace MeuProxySsl.Data
 
         public long CreateEmailContent(EmailContentModel model)
         {
-            var query = "INSERT INTO emailcontent_backup (Id, Name, Tittle, Greetings, MainText, SecondaryText, AuxiliarText, ButtonText, Link) VALUES (@Id, @Name, @Tittle, @Greetings, @MainText, @SecondaryText, @AuxiliarText, @ButtonText, @Link)";
+            var query = "INSERT INTO emailcontent_backup (Id, Name, Tittle, Greetings, MainText, SecondaryText, AuxiliarText, ButtonText, Link, UpdateBy, UpdateOn) VALUES (@Id, @Name, @Tittle, @Greetings, @MainText, @SecondaryText, @AuxiliarText, @ButtonText, @Link, @UpdateBy, @UpdateOn)";
             ExecuteNonQuery(query,
                 new MySqlParameter("@Id", model.Id),
                 new MySqlParameter("@Name", model.Name ?? ""),
@@ -1351,7 +1360,9 @@ namespace MeuProxySsl.Data
                 new MySqlParameter("@SecondaryText", model.SecondaryText ?? ""),
                 new MySqlParameter("@AuxiliarText", model.AuxiliarText ?? ""),
                 new MySqlParameter("@ButtonText", model.ButtonText ?? ""),
-                new MySqlParameter("@Link", model.Link ?? "")
+                new MySqlParameter("@Link", model.Link ?? ""),
+                new MySqlParameter("@UpdateBy", model.UpdateBy ?? (object)DBNull.Value),
+                new MySqlParameter("@UpdateOn", model.UpdateOn ?? (object)DBNull.Value)
             );
             return model.Id;
         }

@@ -60,8 +60,10 @@ namespace MeuProxySsl.Controllers
                     Id = dto.Id,
                     UserId = dto.UserId,
                     PositionId = dto.PositionId,
-                    CreatedOn = DateTime.Now,
-                    CreatedBy = dto.CreatedBy
+                    CreatedOn = dto.CreatedOn ?? DateTime.Now,
+                    CreatedBy = dto.CreatedBy,
+                    UpdatedOn = dto.UpdatedOn,
+                    UpdatedBy = dto.UpdatedBy
                 };
 
                 _database.CreateUserPosition(userPosition);

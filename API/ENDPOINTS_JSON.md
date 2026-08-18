@@ -102,7 +102,10 @@
   "id": 0,
   "name": "string",
   "description": "string",
+  "createdOn": "2026-08-17T00:00:00Z",
   "createdBy": 0,
+  "updatedOn": "2026-08-17T00:00:00Z",
+  "updatedBy": 0,
   "isActive": true
 }
 ```
@@ -133,7 +136,7 @@
   "persistent": true,
   "ss_Key": "string",
   "espace_Id": 0,
-  "isActive": true,
+  "is_Active": true,
   "description": "string"
 }
 ```
@@ -146,7 +149,7 @@
   "persistent": true,
   "ss_Key": "string",
   "espace_Id": 0,
-  "isActive": true,
+  "is_Active": true,
   "description": "string"
 }
 ```
@@ -191,7 +194,10 @@
   "binaryData": "base64_encoded_bytes",
   "isActive": true,
   "description": "string",
-  "createdBy": 0
+  "createdOn": "2026-08-17T00:00:00Z",
+  "createdBy": 0,
+  "updatedOn": "2026-08-17T00:00:00Z",
+  "updatedBy": 0
 }
 ```
 
@@ -200,6 +206,7 @@
 {
   "id": 0,
   "name": "string",
+  "binaryData": "base64_encoded_bytes",
   "isActive": true,
   "description": "string",
   "createdOn": "2026-08-17T00:00:00Z",
@@ -304,6 +311,8 @@
   "plataformTypeId": "string",
   "ip": "string",
   "token": "string",
+  "createdOn": "2026-08-17T00:00:00Z",
+  "updateOn": "2026-08-17T00:00:00Z",
   "regionName": "string",
   "city": "string",
   "country": "string",
@@ -330,7 +339,8 @@
   "country": "string",
   "v_OS": "string",
   "v_Browser": "string",
-  "deeplink": "string"
+  "deeplink": "string",
+  "password": "string"
 }
 ```
 
@@ -367,11 +377,11 @@
 {
   "id": 0,
   "userId": 0,
+  "isActive": true,
   "name": "string",
   "userAvatarId": 0,
   "isChild": false,
   "isMain": false,
-  "isActive": true,
   "createdOn": "2026-08-17T00:00:00Z",
   "deletedOn": "2026-08-17T00:00:00Z"
 }
@@ -409,6 +419,7 @@
 ```json
 {
   "id": 0,
+  "binaryData": "base64_encoded_bytes",
   "name": "string"
 }
 ```
@@ -423,7 +434,10 @@
   "id": 0,
   "userId": 0,
   "positionId": 0,
-  "createdBy": 0
+  "createdOn": "2026-08-17T00:00:00Z",
+  "createdBy": 0,
+  "updatedOn": "2026-08-17T00:00:00Z",
+  "updatedBy": 0
 }
 ```
 
@@ -500,7 +514,7 @@
   "external_Id": "string",
   "creation_Date": "2026-08-17T00:00:00Z",
   "last_Login": "2026-08-17T00:00:00Z",
-  "isActive": true
+  "is_Active": true
 }
 ```
 
@@ -510,12 +524,13 @@
   "id": 0,
   "name": "string",
   "username": "string",
+  "password": "string",
   "email": "string",
   "mobilePhone": "string",
   "external_Id": "string",
   "creation_Date": "2026-08-17T00:00:00Z",
   "last_Login": "2026-08-17T00:00:00Z",
-  "isActive": true
+  "is_Active": true
 }
 ```
 
@@ -523,11 +538,13 @@
 
 ## Notas Importantes
 
-- **TODOS OS CAMPOS**: Os endpoints recebem TODOS os campos da tabela (incluindo timestamps e campos de auditoria)
+- **TABELA RÉPLICA OUTSYSTEM**: Estas tabelas são réplicas do OutSystems; por isso, o request deve enviar todos os campos da tabela, sem exceção, para manter a consistência da réplica
+- **NENHUM CAMPO GERENCIADO PELO BANCO**: Campos de auditoria, timestamps, status e chaves devem ser enviados explicitamente pelo cliente
+- **INSERT EXPLÍCITO**: O banco grava exatamente os valores que chegam no payload; não há preenchimento automático de colunas em massa para estes endpoints
 - **BinaryData**: Quando usado em criar avatares ou pictures, deve ser enviado como string em base64
 - **Datas**: Formato ISO 8601 (2026-08-17T00:00:00Z)
 - **Booleanos**: true/false
 - **IDs numéricos**: Podem ser auto-gerados (0) ou específicos
-- **Campos com "?"** na classe: São nullable no banco de dados
-- **Auditoria**: CreatedOn, UpdatedOn, UpdateBy, IsValid, DeletedOn devem ser enviados pelo cliente
-- **Cliente Responsável**: O cliente é responsável por enviar todos os dados, incluindo informações de auditoria e timestamps
+- **Campos nullable**: Podem ser enviados como null quando o valor não existir
+- **Cliente Responsável**: O cliente é responsável por enviar todos os dados da tabela, incluindo informações de auditoria, timestamps, status e campos de controle
+- **Validação de contrato**: Qualquer campo da tabela que não estiver no request pode gerar inconsistência na réplica OutSystems

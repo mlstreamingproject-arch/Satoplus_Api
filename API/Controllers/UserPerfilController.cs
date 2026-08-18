@@ -64,7 +64,8 @@ namespace MeuProxySsl.Controllers
                     UserAvatarId = dto.UserAvatarId,
                     IsChild = dto.IsChild ?? false,
                     IsMain = dto.IsMain ?? false,
-                    CreatedOn = DateTime.Now
+                    CreatedOn = dto.CreatedOn ?? DateTime.Now,
+                    DeletedOn = dto.DeletedOn
                 };
 
                 _database.CreateUserPerfil(perfil);

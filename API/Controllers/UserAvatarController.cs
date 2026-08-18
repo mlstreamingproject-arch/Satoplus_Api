@@ -62,8 +62,10 @@ namespace MeuProxySsl.Controllers
                     BinaryData = dto.BinaryData,
                     IsActive = dto.IsActive ?? true,
                     Description = dto.Description,
-                    CreatedOn = DateTime.Now,
-                    CreatedBy = dto.CreatedBy
+                    CreatedOn = dto.CreatedOn ?? DateTime.Now,
+                    CreatedBy = dto.CreatedBy,
+                    UpdatedOn = dto.UpdatedOn,
+                    UpdatedBy = dto.UpdatedBy
                 };
 
                 _database.CreateUserAvatar(avatar);

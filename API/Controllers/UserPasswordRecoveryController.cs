@@ -59,8 +59,8 @@ namespace MeuProxySsl.Controllers
                 {
                     Id = dto.Id,
                     UserId = dto.UserId,
-                    CreatedOn = DateTime.Now,
-                    IsValid = true
+                    CreatedOn = dto.CreatedOn ?? DateTime.Now,
+                    IsValid = dto.IsValid ?? true
                 };
 
                 _database.CreateUserPasswordRecovery(recovery);

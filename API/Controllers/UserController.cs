@@ -80,7 +80,8 @@ namespace MeuProxySsl.Controllers
                     Email = dto.Email,
                     MobilePhone = dto.MobilePhone,
                     External_Id = dto.External_Id,
-                    Creation_Date = DateTime.Now,
+                    Creation_Date = dto.Creation_Date ?? DateTime.Now,
+                    Last_Login = dto.Last_Login,
                     IsActive = dto.IsActive ?? true
                 };
 

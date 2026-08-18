@@ -61,8 +61,10 @@ namespace MeuProxySsl.Controllers
                     Name = dto.Name,
                     Description = dto.Description,
                     Value = dto.Value,
-                    CreatedOn = DateTime.Now,
-                    CreatedBy = dto.CreatedBy
+                    CreatedOn = dto.CreatedOn ?? DateTime.Now,
+                    CreatedBy = dto.CreatedBy,
+                    UpdateOn = dto.UpdateOn,
+                    UpdateBy = dto.UpdateBy
                 };
 
                 _database.CreateConfiguration(configuration);

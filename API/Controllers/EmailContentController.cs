@@ -66,7 +66,8 @@ namespace MeuProxySsl.Controllers
                     AuxiliarText = dto.AuxiliarText,
                     ButtonText = dto.ButtonText,
                     Link = dto.Link,
-                    UpdateOn = DateTime.Now
+                    UpdateBy = dto.UpdateBy,
+                    UpdateOn = dto.UpdateOn ?? DateTime.Now
                 };
 
                 _database.CreateEmailContent(emailContent);
