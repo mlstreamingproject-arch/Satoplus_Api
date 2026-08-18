@@ -93,7 +93,7 @@ namespace MeuProxySsl.Controllers
                 configuration.Name = dto.Name ?? configuration.Name;
                 configuration.Description = dto.Description ?? configuration.Description;
                 configuration.Value = dto.Value ?? configuration.Value;
-                configuration.UpdateOn = DateTime.Now;
+                configuration.UpdateOn = dto.UpdateOn ?? DateTime.Now;
                 configuration.UpdateBy = dto.UpdateBy ?? configuration.UpdateBy;
 
                 _database.UpdateConfiguration(configuration);

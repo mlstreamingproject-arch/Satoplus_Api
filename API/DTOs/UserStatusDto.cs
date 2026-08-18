@@ -19,5 +19,6 @@ namespace MeuProxySsl.DTOs
     public class UpdateUserStatusDto
     {
         public bool? IsOnLine { get; set; }
+        public DateTime? UpdateOn { get; set; }
     }
 }

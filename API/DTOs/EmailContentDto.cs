@@ -42,6 +42,7 @@ namespace MeuProxySsl.DTOs
         public string AuxiliarText { get; set; }
         public string ButtonText { get; set; }
         public string Link { get; set; }
+        public DateTime? UpdateOn { get; set; }
         public int? UpdateBy { get; set; }
     }
 }

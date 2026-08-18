@@ -37,6 +37,7 @@ namespace MeuProxySsl.DTOs
         public string Email { get; set; }
         public string MobilePhone { get; set; }
         public string External_Id { get; set; }
+        public DateTime? Last_Login { get; set; }
         public bool? IsActive { get; set; }
     }
 }

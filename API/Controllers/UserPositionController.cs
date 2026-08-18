@@ -91,7 +91,7 @@ namespace MeuProxySsl.Controllers
 
                 userPosition.UserId = dto.UserId ?? userPosition.UserId;
                 userPosition.PositionId = dto.PositionId ?? userPosition.PositionId;
-                userPosition.UpdatedOn = DateTime.Now;
+                userPosition.UpdatedOn = dto.UpdatedOn ?? DateTime.Now;
                 userPosition.UpdatedBy = dto.UpdatedBy ?? userPosition.UpdatedBy;
 
                 _database.UpdateUserPosition(userPosition);

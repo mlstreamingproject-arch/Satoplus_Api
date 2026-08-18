@@ -114,6 +114,7 @@ namespace MeuProxySsl.Controllers
                 user.Email = dto.Email ?? user.Email;
                 user.MobilePhone = dto.MobilePhone ?? user.MobilePhone;
                 user.External_Id = dto.External_Id ?? user.External_Id;
+                user.Last_Login = dto.Last_Login ?? user.Last_Login;
                 user.IsActive = dto.IsActive ?? user.IsActive;
 
                 _database.UpdateUser(user);

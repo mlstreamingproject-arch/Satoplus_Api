@@ -101,7 +101,7 @@ namespace MeuProxySsl.Controllers
                 emailContent.AuxiliarText = dto.AuxiliarText ?? emailContent.AuxiliarText;
                 emailContent.ButtonText = dto.ButtonText ?? emailContent.ButtonText;
                 emailContent.Link = dto.Link ?? emailContent.Link;
-                emailContent.UpdateOn = DateTime.Now;
+                emailContent.UpdateOn = dto.UpdateOn ?? DateTime.Now;
                 emailContent.UpdateBy = dto.UpdateBy ?? emailContent.UpdateBy;
 
                 _database.UpdateEmailContent(emailContent);

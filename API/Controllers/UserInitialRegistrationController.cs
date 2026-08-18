@@ -102,7 +102,7 @@ namespace MeuProxySsl.Controllers
                 registration.PlataformTypeId = dto.PlataformTypeId ?? registration.PlataformTypeId;
                 registration.IP = dto.IP ?? registration.IP;
                 registration.Token = dto.Token ?? registration.Token;
-                registration.UpdateOn = DateTime.Now;
+                registration.UpdateOn = dto.UpdateOn ?? DateTime.Now;
                 registration.RegionName = dto.RegionName ?? registration.RegionName;
                 registration.City = dto.City ?? registration.City;
                 registration.Country = dto.Country ?? registration.Country;

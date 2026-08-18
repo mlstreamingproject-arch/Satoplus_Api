@@ -97,6 +97,7 @@ namespace MeuProxySsl.Controllers
                 perfil.UserAvatarId = dto.UserAvatarId ?? perfil.UserAvatarId;
                 perfil.IsChild = dto.IsChild ?? perfil.IsChild;
                 perfil.IsMain = dto.IsMain ?? perfil.IsMain;
+                perfil.DeletedOn = dto.DeletedOn ?? perfil.DeletedOn;
 
                 _database.UpdateUserPerfil(perfil);
                 return Ok(perfil);
