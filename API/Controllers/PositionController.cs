@@ -61,8 +61,10 @@ namespace MeuProxySsl.Controllers
                     Id = dto.Id,
                     Name = dto.Name,
                     Description = dto.Description,
-                    CreatedOn = DateTime.Now,
+                    CreatedOn = dto.CreatedOn ?? DateTime.Now,
                     CreatedBy = dto.CreatedBy,
+                    UpdatedOn = dto.UpdatedOn,
+                    UpdatedBy = dto.UpdatedBy,
                     IsActive = dto.IsActive ?? true
                 };
 

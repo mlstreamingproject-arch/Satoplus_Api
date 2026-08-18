@@ -28,6 +28,8 @@ namespace MeuProxySsl.DTOs
         public string PlataformTypeId { get; set; }
         public string IP { get; set; }
         public string Token { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public DateTime? UpdateOn { get; set; }
         public string RegionName { get; set; }
         public string City { get; set; }
         public string Country { get; set; }

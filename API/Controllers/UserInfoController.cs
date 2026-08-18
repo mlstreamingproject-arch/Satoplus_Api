@@ -59,8 +59,10 @@ namespace MeuProxySsl.Controllers
                 {
                     Id = dto.Id,
                     Biography = dto.Biography,
-                    CreatedOn = DateTime.Now,
+                    CreatedOn = dto.CreatedOn ?? DateTime.Now,
                     CreatedBy = dto.CreatedBy,
+                    UpdatedOn = dto.UpdatedOn,
+                    UpdatedBy = dto.UpdatedBy,
                     IsStatusEmail = dto.IsStatusEmail,
                     HasStreamingAccount = dto.HasStreamingAccount,
                     IsCollaborator = dto.IsCollaborator,
