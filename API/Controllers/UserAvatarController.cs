@@ -95,7 +95,7 @@ namespace MeuProxySsl.Controllers
                 avatar.BinaryData = dto.BinaryData ?? avatar.BinaryData;
                 avatar.IsActive = dto.IsActive ?? avatar.IsActive;
                 avatar.Description = dto.Description ?? avatar.Description;
-                avatar.UpdatedOn = DateTime.Now;
+                avatar.UpdatedOn = dto.UpdatedOn ?? DateTime.Now;
                 avatar.UpdatedBy = dto.UpdatedBy ?? avatar.UpdatedBy;
 
                 _database.UpdateUserAvatar(avatar);

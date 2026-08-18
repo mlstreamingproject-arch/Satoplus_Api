@@ -93,7 +93,7 @@ namespace MeuProxySsl.Controllers
 
                 position.Name = dto.Name ?? position.Name;
                 position.Description = dto.Description ?? position.Description;
-                position.UpdatedOn = DateTime.Now;
+                position.UpdatedOn = dto.UpdatedOn ?? DateTime.Now;
                 position.UpdatedBy = dto.UpdatedBy ?? position.UpdatedBy;
                 position.IsActive = dto.IsActive ?? position.IsActive;
 

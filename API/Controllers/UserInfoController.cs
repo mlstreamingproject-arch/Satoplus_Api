@@ -96,7 +96,7 @@ namespace MeuProxySsl.Controllers
                     return NotFound();
 
                 info.Biography = dto.Biography ?? info.Biography;
-                info.UpdatedOn = DateTime.Now;
+                info.UpdatedOn = dto.UpdatedOn ?? DateTime.Now;
                 info.UpdatedBy = dto.UpdatedBy ?? info.UpdatedBy;
                 info.IsStatusEmail = dto.IsStatusEmail ?? info.IsStatusEmail;
                 info.HasStreamingAccount = dto.HasStreamingAccount ?? info.HasStreamingAccount;

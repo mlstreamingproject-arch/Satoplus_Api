@@ -39,6 +39,7 @@ namespace MeuProxySsl.DTOs
     public class UpdateUserInfoDto
     {
         public string Biography { get; set; }
+        public DateTime? UpdatedOn { get; set; }
         public int? UpdatedBy { get; set; }
         public bool? IsStatusEmail { get; set; }
         public bool? HasStreamingAccount { get; set; }
