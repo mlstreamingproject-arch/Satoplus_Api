@@ -85,8 +85,8 @@ namespace MeuProxySsl.Controllers
                 if (picture == null)
                     return NotFound();
 
-                picture.BinaryData = dto.BinaryData ?? picture.BinaryData;
-                picture.Name = dto.Name ?? picture.Name;
+                picture.BinaryData = dto.BinaryData;
+                picture.Name = dto.Name;
 
                 _database.UpdateUserPicture(picture);
                 return Ok(picture);

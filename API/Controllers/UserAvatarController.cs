@@ -91,12 +91,14 @@ namespace MeuProxySsl.Controllers
                 if (avatar == null)
                     return NotFound();
 
-                avatar.Name = dto.Name ?? avatar.Name;
-                avatar.BinaryData = dto.BinaryData ?? avatar.BinaryData;
-                avatar.IsActive = dto.IsActive ?? avatar.IsActive;
-                avatar.Description = dto.Description ?? avatar.Description;
-                avatar.UpdatedOn = dto.UpdatedOn ?? DateTime.Now;
-                avatar.UpdatedBy = dto.UpdatedBy ?? avatar.UpdatedBy;
+                avatar.Name = dto.Name;
+                avatar.BinaryData = dto.BinaryData;
+                avatar.IsActive = dto.IsActive;
+                avatar.Description = dto.Description;
+                avatar.CreatedOn = dto.CreatedOn;
+                avatar.CreatedBy = dto.CreatedBy;
+                avatar.UpdatedOn = dto.UpdatedOn;
+                avatar.UpdatedBy = dto.UpdatedBy;
 
                 _database.UpdateUserAvatar(avatar);
                 return Ok(avatar);

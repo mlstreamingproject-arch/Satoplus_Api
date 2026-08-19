@@ -149,9 +149,9 @@ namespace MeuProxySsl.Data
             var query = "UPDATE plataformtype_backup SET Label = @Label, `Order` = @Order, Is_Active = @IsActive WHERE Id = @Id";
             ExecuteNonQuery(query,
                 new MySqlParameter("@Id", model.Id ?? ""),
-                new MySqlParameter("@Label", model.Label ?? ""),
-                new MySqlParameter("@Order", model.Order ?? 0),
-                new MySqlParameter("@IsActive", model.IsActive ?? true)
+                new MySqlParameter("@Label", model.Label ?? (object)DBNull.Value),
+                new MySqlParameter("@Order", model.Order ?? (object)DBNull.Value),
+                new MySqlParameter("@IsActive", model.IsActive ?? (object)DBNull.Value)
             );
         }
 
@@ -217,14 +217,16 @@ namespace MeuProxySsl.Data
 
         public void UpdatePosition(Position model)
         {
-            var query = "UPDATE position_backup SET Name = @Name, Description = @Description, UpdatedOn = @UpdatedOn, UpdatedBy = @UpdatedBy, IsActive = @IsActive WHERE Id = @Id";
+            var query = "UPDATE position_backup SET Name = @Name, Description = @Description, CreatedOn = @CreatedOn, CreatedBy = @CreatedBy, UpdatedOn = @UpdatedOn, UpdatedBy = @UpdatedBy, IsActive = @IsActive WHERE Id = @Id";
             ExecuteNonQuery(query,
                 new MySqlParameter("@Id", model.Id),
-                new MySqlParameter("@Name", model.Name ?? ""),
-                new MySqlParameter("@Description", model.Description ?? ""),
-                new MySqlParameter("@UpdatedOn", model.UpdatedOn ?? DateTime.Now),
-                new MySqlParameter("@UpdatedBy", model.UpdatedBy ?? 0),
-                new MySqlParameter("@IsActive", model.IsActive ?? true)
+                new MySqlParameter("@Name", model.Name ?? (object)DBNull.Value),
+                new MySqlParameter("@Description", model.Description ?? (object)DBNull.Value),
+                new MySqlParameter("@CreatedOn", model.CreatedOn ?? (object)DBNull.Value),
+                new MySqlParameter("@CreatedBy", model.CreatedBy ?? (object)DBNull.Value),
+                new MySqlParameter("@UpdatedOn", model.UpdatedOn ?? (object)DBNull.Value),
+                new MySqlParameter("@UpdatedBy", model.UpdatedBy ?? (object)DBNull.Value),
+                new MySqlParameter("@IsActive", model.IsActive ?? (object)DBNull.Value)
             );
         }
 
@@ -292,12 +294,12 @@ namespace MeuProxySsl.Data
             var query = "UPDATE role_backup SET Name = @Name, Persistent = @Persistent, SS_Key = @SS_Key, Espace_Id = @Espace_Id, Is_Active = @IsActive, Description = @Description WHERE Id = @Id";
             ExecuteNonQuery(query,
                 new MySqlParameter("@Id", model.Id),
-                new MySqlParameter("@Name", model.Name ?? ""),
-                new MySqlParameter("@Persistent", model.Persistent ?? true),
-                new MySqlParameter("@SS_Key", model.SS_Key ?? ""),
-                new MySqlParameter("@Espace_Id", model.Espace_Id ?? 0),
-                new MySqlParameter("@IsActive", model.IsActive ?? true),
-                new MySqlParameter("@Description", model.Description ?? "")
+                new MySqlParameter("@Name", model.Name ?? (object)DBNull.Value),
+                new MySqlParameter("@Persistent", model.Persistent ?? (object)DBNull.Value),
+                new MySqlParameter("@SS_Key", model.SS_Key ?? (object)DBNull.Value),
+                new MySqlParameter("@Espace_Id", model.Espace_Id ?? (object)DBNull.Value),
+                new MySqlParameter("@IsActive", model.IsActive ?? (object)DBNull.Value),
+                new MySqlParameter("@Description", model.Description ?? (object)DBNull.Value)
             );
         }
 
@@ -390,16 +392,18 @@ namespace MeuProxySsl.Data
 
         public void UpdateUser(User model)
         {
-            var query = "UPDATE user_backup SET Name = @Name, Username = @Username, Password = @Password, Email = @Email, MobilePhone = @MobilePhone, External_Id = @External_Id, Is_Active = @IsActive WHERE Id = @Id";
+            var query = "UPDATE user_backup SET Name = @Name, Username = @Username, Password = @Password, Email = @Email, MobilePhone = @MobilePhone, External_Id = @External_Id, Creation_Date = @Creation_Date, Last_Login = @Last_Login, Is_Active = @IsActive WHERE Id = @Id";
             ExecuteNonQuery(query,
                 new MySqlParameter("@Id", model.Id),
-                new MySqlParameter("@Name", model.Name ?? ""),
-                new MySqlParameter("@Username", model.Username ?? ""),
-                new MySqlParameter("@Password", model.Password ?? ""),
-                new MySqlParameter("@Email", model.Email ?? ""),
-                new MySqlParameter("@MobilePhone", model.MobilePhone ?? ""),
-                new MySqlParameter("@External_Id", model.External_Id ?? ""),
-                new MySqlParameter("@IsActive", model.IsActive ?? true)
+                new MySqlParameter("@Name", model.Name ?? (object)DBNull.Value),
+                new MySqlParameter("@Username", model.Username ?? (object)DBNull.Value),
+                new MySqlParameter("@Password", model.Password ?? (object)DBNull.Value),
+                new MySqlParameter("@Email", model.Email ?? (object)DBNull.Value),
+                new MySqlParameter("@MobilePhone", model.MobilePhone ?? (object)DBNull.Value),
+                new MySqlParameter("@External_Id", model.External_Id ?? (object)DBNull.Value),
+                new MySqlParameter("@Creation_Date", model.Creation_Date ?? (object)DBNull.Value),
+                new MySqlParameter("@Last_Login", model.Last_Login ?? (object)DBNull.Value),
+                new MySqlParameter("@IsActive", model.IsActive ?? (object)DBNull.Value)
             );
         }
 
@@ -455,8 +459,8 @@ namespace MeuProxySsl.Data
             var query = "UPDATE user_role_backup SET User_Id = @User_Id, Role_Id = @Role_Id WHERE Id = @Id";
             ExecuteNonQuery(query,
                 new MySqlParameter("@Id", model.Id),
-                new MySqlParameter("@User_Id", model.User_Id ?? 0),
-                new MySqlParameter("@Role_Id", model.Role_Id ?? 0)
+                new MySqlParameter("@User_Id", model.User_Id ?? (object)DBNull.Value),
+                new MySqlParameter("@Role_Id", model.Role_Id ?? (object)DBNull.Value)
             );
         }
 
@@ -518,13 +522,14 @@ namespace MeuProxySsl.Data
 
         public void UpdateUserAccess(UserAccess model)
         {
-            var query = "UPDATE useraccess_backup SET UserId = @UserId, UserPerfilId = @UserPerfilId, PlataformTypeId = @PlataformTypeId, IP = @IP WHERE Id = @Id";
+            var query = "UPDATE useraccess_backup SET UserId = @UserId, UserPerfilId = @UserPerfilId, PlataformTypeId = @PlataformTypeId, IP = @IP, CreatedOn = @CreatedOn WHERE Id = @Id";
             ExecuteNonQuery(query,
                 new MySqlParameter("@Id", model.Id),
-                new MySqlParameter("@UserId", model.UserId ?? 0),
-                new MySqlParameter("@UserPerfilId", model.UserPerfilId ?? 0),
-                new MySqlParameter("@PlataformTypeId", model.PlataformTypeId ?? ""),
-                new MySqlParameter("@IP", model.IP ?? "")
+                new MySqlParameter("@UserId", model.UserId ?? (object)DBNull.Value),
+                new MySqlParameter("@UserPerfilId", model.UserPerfilId ?? (object)DBNull.Value),
+                new MySqlParameter("@PlataformTypeId", model.PlataformTypeId ?? (object)DBNull.Value),
+                new MySqlParameter("@IP", model.IP ?? (object)DBNull.Value),
+                new MySqlParameter("@CreatedOn", model.CreatedOn ?? (object)DBNull.Value)
             );
         }
 
@@ -595,15 +600,17 @@ namespace MeuProxySsl.Data
 
         public void UpdateUserAvatar(UserAvatar model)
         {
-            var query = "UPDATE useravatar_backup SET Name = @Name, binaryData = @BinaryData, IsActive = @IsActive, Description = @Description, UpdatedOn = @UpdatedOn, UpdatedBy = @UpdatedBy WHERE Id = @Id";
+            var query = "UPDATE useravatar_backup SET Name = @Name, binaryData = @BinaryData, IsActive = @IsActive, Description = @Description, CreatedOn = @CreatedOn, CreatedBy = @CreatedBy, UpdatedOn = @UpdatedOn, UpdatedBy = @UpdatedBy WHERE Id = @Id";
             ExecuteNonQuery(query,
                 new MySqlParameter("@Id", model.Id),
-                new MySqlParameter("@Name", model.Name ?? ""),
-                new MySqlParameter("@BinaryData", model.BinaryData ?? new byte[0]),
-                new MySqlParameter("@IsActive", model.IsActive ?? true),
-                new MySqlParameter("@Description", model.Description ?? ""),
-                new MySqlParameter("@UpdatedOn", model.UpdatedOn ?? DateTime.Now),
-                new MySqlParameter("@UpdatedBy", model.UpdatedBy ?? 0)
+                new MySqlParameter("@Name", model.Name ?? (object)DBNull.Value),
+                new MySqlParameter("@BinaryData", model.BinaryData ?? (object)DBNull.Value),
+                new MySqlParameter("@IsActive", model.IsActive ?? (object)DBNull.Value),
+                new MySqlParameter("@Description", model.Description ?? (object)DBNull.Value),
+                new MySqlParameter("@CreatedOn", model.CreatedOn ?? (object)DBNull.Value),
+                new MySqlParameter("@CreatedBy", model.CreatedBy ?? (object)DBNull.Value),
+                new MySqlParameter("@UpdatedOn", model.UpdatedOn ?? (object)DBNull.Value),
+                new MySqlParameter("@UpdatedBy", model.UpdatedBy ?? (object)DBNull.Value)
             );
         }
 
@@ -686,17 +693,17 @@ namespace MeuProxySsl.Data
             var query = "UPDATE userdevice_backup SET Version = @Version, UUID = @UUID, Serial = @Serial, Platform = @Platform, Model = @Model, Manufacturer = @Manufacturer, IsVirtual = @IsVirtual, GetCordova = @GetCordova, DeviceType = @DeviceType, UserId = @UserId, UserInitialRegistrationToken = @UserInitialRegistrationToken WHERE Id = @Id";
             ExecuteNonQuery(query,
                 new MySqlParameter("@Id", model.Id),
-                new MySqlParameter("@Version", model.Version ?? ""),
-                new MySqlParameter("@UUID", model.UUID ?? ""),
-                new MySqlParameter("@Serial", model.Serial ?? ""),
-                new MySqlParameter("@Platform", model.Platform ?? ""),
-                new MySqlParameter("@Model", model.Model ?? ""),
-                new MySqlParameter("@Manufacturer", model.Manufacturer ?? ""),
-                new MySqlParameter("@IsVirtual", model.IsVirtual ?? false),
-                new MySqlParameter("@GetCordova", model.GetCordova ?? ""),
-                new MySqlParameter("@DeviceType", model.DeviceType ?? ""),
-                new MySqlParameter("@UserId", model.UserId ?? 0),
-                new MySqlParameter("@UserInitialRegistrationToken", model.UserInitialRegistrationToken ?? "")
+                new MySqlParameter("@Version", model.Version ?? (object)DBNull.Value),
+                new MySqlParameter("@UUID", model.UUID ?? (object)DBNull.Value),
+                new MySqlParameter("@Serial", model.Serial ?? (object)DBNull.Value),
+                new MySqlParameter("@Platform", model.Platform ?? (object)DBNull.Value),
+                new MySqlParameter("@Model", model.Model ?? (object)DBNull.Value),
+                new MySqlParameter("@Manufacturer", model.Manufacturer ?? (object)DBNull.Value),
+                new MySqlParameter("@IsVirtual", model.IsVirtual ?? (object)DBNull.Value),
+                new MySqlParameter("@GetCordova", model.GetCordova ?? (object)DBNull.Value),
+                new MySqlParameter("@DeviceType", model.DeviceType ?? (object)DBNull.Value),
+                new MySqlParameter("@UserId", model.UserId ?? (object)DBNull.Value),
+                new MySqlParameter("@UserInitialRegistrationToken", model.UserInitialRegistrationToken ?? (object)DBNull.Value)
             );
         }
 
@@ -777,19 +784,21 @@ namespace MeuProxySsl.Data
 
         public void UpdateUserInfo(UserInfo model)
         {
-            var query = "UPDATE userinfo_backup SET Biography = @Biography, UpdatedOn = @UpdatedOn, UpdatedBy = @UpdatedBy, IsStatusEmail = @IsStatusEmail, HasStreamingAccount = @HasStreamingAccount, IsCollaborator = @IsCollaborator, BirthDate = @BirthDate, Country = @Country, CountryCode = @CountryCode, Address = @Address WHERE Id = @Id";
+            var query = "UPDATE userinfo_backup SET Biography = @Biography, CreatedOn = @CreatedOn, CreatedBy = @CreatedBy, UpdatedOn = @UpdatedOn, UpdatedBy = @UpdatedBy, IsStatusEmail = @IsStatusEmail, HasStreamingAccount = @HasStreamingAccount, IsCollaborator = @IsCollaborator, BirthDate = @BirthDate, Country = @Country, CountryCode = @CountryCode, Address = @Address WHERE Id = @Id";
             ExecuteNonQuery(query,
                 new MySqlParameter("@Id", model.Id),
-                new MySqlParameter("@Biography", model.Biography ?? ""),
-                new MySqlParameter("@UpdatedOn", model.UpdatedOn ?? DateTime.Now),
-                new MySqlParameter("@UpdatedBy", model.UpdatedBy ?? 0),
-                new MySqlParameter("@IsStatusEmail", model.IsStatusEmail ?? false),
-                new MySqlParameter("@HasStreamingAccount", model.HasStreamingAccount ?? false),
-                new MySqlParameter("@IsCollaborator", model.IsCollaborator ?? false),
-                new MySqlParameter("@BirthDate", model.BirthDate.HasValue ? model.BirthDate.Value : (object)DBNull.Value),
-                new MySqlParameter("@Country", model.Country ?? ""),
-                new MySqlParameter("@CountryCode", model.CountryCode ?? ""),
-                new MySqlParameter("@Address", model.Address ?? "")
+                new MySqlParameter("@Biography", model.Biography ?? (object)DBNull.Value),
+                new MySqlParameter("@CreatedOn", model.CreatedOn ?? (object)DBNull.Value),
+                new MySqlParameter("@CreatedBy", model.CreatedBy ?? (object)DBNull.Value),
+                new MySqlParameter("@UpdatedOn", model.UpdatedOn ?? (object)DBNull.Value),
+                new MySqlParameter("@UpdatedBy", model.UpdatedBy ?? (object)DBNull.Value),
+                new MySqlParameter("@IsStatusEmail", model.IsStatusEmail ?? (object)DBNull.Value),
+                new MySqlParameter("@HasStreamingAccount", model.HasStreamingAccount ?? (object)DBNull.Value),
+                new MySqlParameter("@IsCollaborator", model.IsCollaborator ?? (object)DBNull.Value),
+                new MySqlParameter("@BirthDate", model.BirthDate ?? (object)DBNull.Value),
+                new MySqlParameter("@Country", model.Country ?? (object)DBNull.Value),
+                new MySqlParameter("@CountryCode", model.CountryCode ?? (object)DBNull.Value),
+                new MySqlParameter("@Address", model.Address ?? (object)DBNull.Value)
             );
         }
 
@@ -878,22 +887,23 @@ namespace MeuProxySsl.Data
 
         public void UpdateUserInitialRegistration(UserInitialRegistration model)
         {
-            var query = "UPDATE userinitialregistration_backup SET Status = @Status, Email = @Email, PlataformTypeId = @PlataformTypeId, IP = @IP, Token = @Token, UpdateOn = @UpdateOn, RegionName = @RegionName, City = @City, Country = @Country, v_OS = @V_OS, v_Browser = @V_Browser, Deeplink = @Deeplink, Password = @Password WHERE Id = @Id";
+            var query = "UPDATE userinitialregistration_backup SET Status = @Status, Email = @Email, PlataformTypeId = @PlataformTypeId, IP = @IP, Token = @Token, CreatedOn = @CreatedOn, UpdateOn = @UpdateOn, RegionName = @RegionName, City = @City, Country = @Country, v_OS = @V_OS, v_Browser = @V_Browser, Deeplink = @Deeplink, Password = @Password WHERE Id = @Id";
             ExecuteNonQuery(query,
                 new MySqlParameter("@Id", model.Id),
-                new MySqlParameter("@Status", model.Status ?? false),
-                new MySqlParameter("@Email", model.Email ?? ""),
-                new MySqlParameter("@PlataformTypeId", model.PlataformTypeId ?? ""),
-                new MySqlParameter("@IP", model.IP ?? ""),
-                new MySqlParameter("@Token", model.Token ?? ""),
-                new MySqlParameter("@UpdateOn", model.UpdateOn ?? DateTime.Now),
-                new MySqlParameter("@RegionName", model.RegionName ?? ""),
-                new MySqlParameter("@City", model.City ?? ""),
-                new MySqlParameter("@Country", model.Country ?? ""),
-                new MySqlParameter("@V_OS", model.V_OS ?? ""),
-                new MySqlParameter("@V_Browser", model.V_Browser ?? ""),
-                new MySqlParameter("@Deeplink", model.Deeplink ?? ""),
-                new MySqlParameter("@Password", model.Password ?? "")
+                new MySqlParameter("@Status", model.Status ?? (object)DBNull.Value),
+                new MySqlParameter("@Email", model.Email ?? (object)DBNull.Value),
+                new MySqlParameter("@PlataformTypeId", model.PlataformTypeId ?? (object)DBNull.Value),
+                new MySqlParameter("@IP", model.IP ?? (object)DBNull.Value),
+                new MySqlParameter("@Token", model.Token ?? (object)DBNull.Value),
+                new MySqlParameter("@CreatedOn", model.CreatedOn ?? (object)DBNull.Value),
+                new MySqlParameter("@UpdateOn", model.UpdateOn ?? (object)DBNull.Value),
+                new MySqlParameter("@RegionName", model.RegionName ?? (object)DBNull.Value),
+                new MySqlParameter("@City", model.City ?? (object)DBNull.Value),
+                new MySqlParameter("@Country", model.Country ?? (object)DBNull.Value),
+                new MySqlParameter("@V_OS", model.V_OS ?? (object)DBNull.Value),
+                new MySqlParameter("@V_Browser", model.V_Browser ?? (object)DBNull.Value),
+                new MySqlParameter("@Deeplink", model.Deeplink ?? (object)DBNull.Value),
+                new MySqlParameter("@Password", model.Password ?? (object)DBNull.Value)
             );
         }
 
@@ -949,11 +959,12 @@ namespace MeuProxySsl.Data
 
         public void UpdateUserPasswordRecovery(UserPasswordRecovery model)
         {
-            var query = "UPDATE userpasswordrecovery_backup SET UserId = @UserId, IsValid = @IsValid WHERE Id = @Id";
+            var query = "UPDATE userpasswordrecovery_backup SET UserId = @UserId, CreatedOn = @CreatedOn, IsValid = @IsValid WHERE Id = @Id";
             ExecuteNonQuery(query,
                 new MySqlParameter("@Id", model.Id),
-                new MySqlParameter("@UserId", model.UserId ?? 0),
-                new MySqlParameter("@IsValid", model.IsValid ?? true)
+                new MySqlParameter("@UserId", model.UserId ?? (object)DBNull.Value),
+                new MySqlParameter("@CreatedOn", model.CreatedOn ?? (object)DBNull.Value),
+                new MySqlParameter("@IsValid", model.IsValid ?? (object)DBNull.Value)
             );
         }
 
@@ -1024,15 +1035,17 @@ namespace MeuProxySsl.Data
 
         public void UpdateUserPerfil(UserPerfil model)
         {
-            var query = "UPDATE userperfil_backup SET UserId = @UserId, IsActive = @IsActive, Name = @Name, UserAvatarId = @UserAvatarId, IsChild = @IsChild, IsMain = @IsMain WHERE Id = @Id";
+            var query = "UPDATE userperfil_backup SET UserId = @UserId, IsActive = @IsActive, Name = @Name, UserAvatarId = @UserAvatarId, IsChild = @IsChild, IsMain = @IsMain, CreatedOn = @CreatedOn, DeletedOn = @DeletedOn WHERE Id = @Id";
             ExecuteNonQuery(query,
                 new MySqlParameter("@Id", model.Id),
-                new MySqlParameter("@UserId", model.UserId ?? 0),
-                new MySqlParameter("@IsActive", model.IsActive ?? true),
-                new MySqlParameter("@Name", model.Name ?? ""),
-                new MySqlParameter("@UserAvatarId", model.UserAvatarId ?? 0),
-                new MySqlParameter("@IsChild", model.IsChild ?? false),
-                new MySqlParameter("@IsMain", model.IsMain ?? false)
+                new MySqlParameter("@UserId", model.UserId ?? (object)DBNull.Value),
+                new MySqlParameter("@IsActive", model.IsActive ?? (object)DBNull.Value),
+                new MySqlParameter("@Name", model.Name ?? (object)DBNull.Value),
+                new MySqlParameter("@UserAvatarId", model.UserAvatarId ?? (object)DBNull.Value),
+                new MySqlParameter("@IsChild", model.IsChild ?? (object)DBNull.Value),
+                new MySqlParameter("@IsMain", model.IsMain ?? (object)DBNull.Value),
+                new MySqlParameter("@CreatedOn", model.CreatedOn ?? (object)DBNull.Value),
+                new MySqlParameter("@DeletedOn", model.DeletedOn ?? (object)DBNull.Value)
             );
         }
 
@@ -1088,8 +1101,8 @@ namespace MeuProxySsl.Data
             var query = "UPDATE userpicture_backup SET binaryData = @BinaryData, Name = @Name WHERE Id = @Id";
             ExecuteNonQuery(query,
                 new MySqlParameter("@Id", model.Id),
-                new MySqlParameter("@BinaryData", model.BinaryData ?? new byte[0]),
-                new MySqlParameter("@Name", model.Name ?? "")
+                new MySqlParameter("@BinaryData", model.BinaryData ?? (object)DBNull.Value),
+                new MySqlParameter("@Name", model.Name ?? (object)DBNull.Value)
             );
         }
 
@@ -1154,13 +1167,15 @@ namespace MeuProxySsl.Data
 
         public void UpdateUserPosition(UserPosition model)
         {
-            var query = "UPDATE userposition_backup SET UserId = @UserId, PositionId = @PositionId, UpdatedOn = @UpdatedOn, UpdatedBy = @UpdatedBy WHERE Id = @Id";
+            var query = "UPDATE userposition_backup SET UserId = @UserId, PositionId = @PositionId, CreatedOn = @CreatedOn, CreatedBy = @CreatedBy, UpdatedOn = @UpdatedOn, UpdatedBy = @UpdatedBy WHERE Id = @Id";
             ExecuteNonQuery(query,
                 new MySqlParameter("@Id", model.Id),
-                new MySqlParameter("@UserId", model.UserId ?? 0),
-                new MySqlParameter("@PositionId", model.PositionId ?? 0),
-                new MySqlParameter("@UpdatedOn", model.UpdatedOn ?? DateTime.Now),
-                new MySqlParameter("@UpdatedBy", model.UpdatedBy ?? 0)
+                new MySqlParameter("@UserId", model.UserId ?? (object)DBNull.Value),
+                new MySqlParameter("@PositionId", model.PositionId ?? (object)DBNull.Value),
+                new MySqlParameter("@CreatedOn", model.CreatedOn ?? (object)DBNull.Value),
+                new MySqlParameter("@CreatedBy", model.CreatedBy ?? (object)DBNull.Value),
+                new MySqlParameter("@UpdatedOn", model.UpdatedOn ?? (object)DBNull.Value),
+                new MySqlParameter("@UpdatedBy", model.UpdatedBy ?? (object)DBNull.Value)
             );
         }
 
@@ -1216,8 +1231,8 @@ namespace MeuProxySsl.Data
             var query = "UPDATE userstatus_backup SET IsOnLine = @IsOnLine, UpdateOn = @UpdateOn WHERE Id = @Id";
             ExecuteNonQuery(query,
                 new MySqlParameter("@Id", model.Id),
-                new MySqlParameter("@IsOnLine", model.IsOnLine ?? false),
-                new MySqlParameter("@UpdateOn", model.UpdateOn ?? DateTime.Now)
+                new MySqlParameter("@IsOnLine", model.IsOnLine ?? (object)DBNull.Value),
+                new MySqlParameter("@UpdateOn", model.UpdateOn ?? (object)DBNull.Value)
             );
         }
 
@@ -1285,14 +1300,16 @@ namespace MeuProxySsl.Data
 
         public void UpdateConfiguration(ConfigurationModel model)
         {
-            var query = "UPDATE configurations_backup SET Name = @Name, Description = @Description, Value = @Value, UpdateOn = @UpdateOn, UpdateBy = @UpdateBy WHERE Id = @Id";
+            var query = "UPDATE configurations_backup SET Name = @Name, Description = @Description, Value = @Value, CreatedOn = @CreatedOn, CreatedBy = @CreatedBy, UpdateOn = @UpdateOn, UpdateBy = @UpdateBy WHERE Id = @Id";
             ExecuteNonQuery(query,
                 new MySqlParameter("@Id", model.Id),
-                new MySqlParameter("@Name", model.Name ?? ""),
-                new MySqlParameter("@Description", model.Description ?? ""),
-                new MySqlParameter("@Value", model.Value ?? ""),
-                new MySqlParameter("@UpdateOn", model.UpdateOn ?? DateTime.Now),
-                new MySqlParameter("@UpdateBy", model.UpdateBy ?? 0)
+                new MySqlParameter("@Name", model.Name ?? (object)DBNull.Value),
+                new MySqlParameter("@Description", model.Description ?? (object)DBNull.Value),
+                new MySqlParameter("@Value", model.Value ?? (object)DBNull.Value),
+                new MySqlParameter("@CreatedOn", model.CreatedOn ?? (object)DBNull.Value),
+                new MySqlParameter("@CreatedBy", model.CreatedBy ?? (object)DBNull.Value),
+                new MySqlParameter("@UpdateOn", model.UpdateOn ?? (object)DBNull.Value),
+                new MySqlParameter("@UpdateBy", model.UpdateBy ?? (object)DBNull.Value)
             );
         }
 
@@ -1372,16 +1389,16 @@ namespace MeuProxySsl.Data
             var query = "UPDATE emailcontent_backup SET Name = @Name, Tittle = @Tittle, Greetings = @Greetings, MainText = @MainText, SecondaryText = @SecondaryText, AuxiliarText = @AuxiliarText, ButtonText = @ButtonText, Link = @Link, UpdateBy = @UpdateBy, UpdateOn = @UpdateOn WHERE Id = @Id";
             ExecuteNonQuery(query,
                 new MySqlParameter("@Id", model.Id),
-                new MySqlParameter("@Name", model.Name ?? ""),
-                new MySqlParameter("@Tittle", model.Tittle ?? ""),
-                new MySqlParameter("@Greetings", model.Greetings ?? ""),
-                new MySqlParameter("@MainText", model.MainText ?? ""),
-                new MySqlParameter("@SecondaryText", model.SecondaryText ?? ""),
-                new MySqlParameter("@AuxiliarText", model.AuxiliarText ?? ""),
-                new MySqlParameter("@ButtonText", model.ButtonText ?? ""),
-                new MySqlParameter("@Link", model.Link ?? ""),
-                new MySqlParameter("@UpdateBy", model.UpdateBy ?? 0),
-                new MySqlParameter("@UpdateOn", model.UpdateOn ?? DateTime.Now)
+                new MySqlParameter("@Name", model.Name ?? (object)DBNull.Value),
+                new MySqlParameter("@Tittle", model.Tittle ?? (object)DBNull.Value),
+                new MySqlParameter("@Greetings", model.Greetings ?? (object)DBNull.Value),
+                new MySqlParameter("@MainText", model.MainText ?? (object)DBNull.Value),
+                new MySqlParameter("@SecondaryText", model.SecondaryText ?? (object)DBNull.Value),
+                new MySqlParameter("@AuxiliarText", model.AuxiliarText ?? (object)DBNull.Value),
+                new MySqlParameter("@ButtonText", model.ButtonText ?? (object)DBNull.Value),
+                new MySqlParameter("@Link", model.Link ?? (object)DBNull.Value),
+                new MySqlParameter("@UpdateBy", model.UpdateBy ?? (object)DBNull.Value),
+                new MySqlParameter("@UpdateOn", model.UpdateOn ?? (object)DBNull.Value)
             );
         }
 

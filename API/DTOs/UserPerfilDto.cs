@@ -36,6 +36,7 @@ namespace MeuProxySsl.DTOs
         public long? UserAvatarId { get; set; }
         public bool? IsChild { get; set; }
         public bool? IsMain { get; set; }
+        public DateTime? CreatedOn { get; set; }
         public DateTime? DeletedOn { get; set; }
     }
 }

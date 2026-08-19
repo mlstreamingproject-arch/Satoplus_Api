@@ -85,8 +85,8 @@ namespace MeuProxySsl.Controllers
                 if (status == null)
                     return NotFound();
 
-                status.IsOnLine = dto.IsOnLine ?? status.IsOnLine;
-                status.UpdateOn = dto.UpdateOn ?? DateTime.Now;
+                status.IsOnLine = dto.IsOnLine;
+                status.UpdateOn = dto.UpdateOn;
 
                 _database.UpdateUserStatus(status);
                 return Ok(status);

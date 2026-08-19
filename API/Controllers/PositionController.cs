@@ -91,11 +91,13 @@ namespace MeuProxySsl.Controllers
                 if (position == null)
                     return NotFound();
 
-                position.Name = dto.Name ?? position.Name;
-                position.Description = dto.Description ?? position.Description;
-                position.UpdatedOn = dto.UpdatedOn ?? DateTime.Now;
-                position.UpdatedBy = dto.UpdatedBy ?? position.UpdatedBy;
-                position.IsActive = dto.IsActive ?? position.IsActive;
+                position.Name = dto.Name;
+                position.Description = dto.Description;
+                position.CreatedOn = dto.CreatedOn;
+                position.CreatedBy = dto.CreatedBy;
+                position.UpdatedOn = dto.UpdatedOn;
+                position.UpdatedBy = dto.UpdatedBy;
+                position.IsActive = dto.IsActive;
 
                 _database.UpdatePosition(position);
                 return Ok(position);

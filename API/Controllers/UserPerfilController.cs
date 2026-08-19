@@ -52,8 +52,8 @@ namespace MeuProxySsl.Controllers
         {
             try
             {
-                if (dto == null || dto.Id <= 0 || dto.UserId <= 0 || string.IsNullOrEmpty(dto.Name))
-                    return BadRequest("Id, UserId e Name são obrigatórios");
+                if (dto == null || dto.Id <= 0 || dto.UserId <= 0)
+                    return BadRequest("Id e UserId são obrigatórios");
 
                 var perfil = new UserPerfil
                 {
@@ -91,13 +91,14 @@ namespace MeuProxySsl.Controllers
                 if (perfil == null)
                     return NotFound();
 
-                perfil.UserId = dto.UserId ?? perfil.UserId;
-                perfil.IsActive = dto.IsActive ?? perfil.IsActive;
-                perfil.Name = dto.Name ?? perfil.Name;
-                perfil.UserAvatarId = dto.UserAvatarId ?? perfil.UserAvatarId;
-                perfil.IsChild = dto.IsChild ?? perfil.IsChild;
-                perfil.IsMain = dto.IsMain ?? perfil.IsMain;
-                perfil.DeletedOn = dto.DeletedOn ?? perfil.DeletedOn;
+                perfil.UserId = dto.UserId;
+                perfil.IsActive = dto.IsActive;
+                perfil.Name = dto.Name;
+                perfil.UserAvatarId = dto.UserAvatarId;
+                perfil.IsChild = dto.IsChild;
+                perfil.IsMain = dto.IsMain;
+                perfil.CreatedOn = dto.CreatedOn;
+                perfil.DeletedOn = dto.DeletedOn;
 
                 _database.UpdateUserPerfil(perfil);
                 return Ok(perfil);

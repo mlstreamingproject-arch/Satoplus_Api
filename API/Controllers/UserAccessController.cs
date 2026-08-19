@@ -88,10 +88,11 @@ namespace MeuProxySsl.Controllers
                 if (userAccess == null)
                     return NotFound();
 
-                userAccess.UserId = dto.UserId ?? userAccess.UserId;
-                userAccess.UserPerfilId = dto.UserPerfilId ?? userAccess.UserPerfilId;
-                userAccess.PlataformTypeId = dto.PlataformTypeId ?? userAccess.PlataformTypeId;
-                userAccess.IP = dto.IP ?? userAccess.IP;
+                userAccess.UserId = dto.UserId;
+                userAccess.UserPerfilId = dto.UserPerfilId;
+                userAccess.PlataformTypeId = dto.PlataformTypeId;
+                userAccess.IP = dto.IP;
+                userAccess.CreatedOn = dto.CreatedOn;
 
                 _database.UpdateUserAccess(userAccess);
                 return Ok(userAccess);

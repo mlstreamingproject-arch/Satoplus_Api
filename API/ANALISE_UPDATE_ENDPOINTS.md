@@ -1,5 +1,7 @@
 # Análise de UPDATE Endpoints - Replicação OutSystems
 
+> **Relatório histórico:** este diagnóstico foi produzido antes da correção dos endpoints. O contrato vigente está em [ENDPOINTS_UPDATE_JSON.md](ENDPOINTS_UPDATE_JSON.md); os DTOs, controllers e queries atuais já enviam e persistem todos os campos, exceto `Id`, e preservam `null` como `NULL`.
+
 ## 📊 Resumo Executivo
 
 Este documento analisa os 17 endpoints UPDATE para identificar inconsistências no contrato de API em relação ao padrão estabelecido nos CREATE endpoints.

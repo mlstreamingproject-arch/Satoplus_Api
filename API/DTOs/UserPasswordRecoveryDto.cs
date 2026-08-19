@@ -21,6 +21,7 @@ namespace MeuProxySsl.DTOs
     public class UpdateUserPasswordRecoveryDto
     {
         public int? UserId { get; set; }
+        public DateTime? CreatedOn { get; set; }
         public bool? IsValid { get; set; }
     }
 }

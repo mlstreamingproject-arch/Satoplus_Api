@@ -90,11 +90,13 @@ namespace MeuProxySsl.Controllers
                 if (configuration == null)
                     return NotFound();
 
-                configuration.Name = dto.Name ?? configuration.Name;
-                configuration.Description = dto.Description ?? configuration.Description;
-                configuration.Value = dto.Value ?? configuration.Value;
-                configuration.UpdateOn = dto.UpdateOn ?? DateTime.Now;
-                configuration.UpdateBy = dto.UpdateBy ?? configuration.UpdateBy;
+                configuration.Name = dto.Name;
+                configuration.Description = dto.Description;
+                configuration.Value = dto.Value;
+                configuration.CreatedOn = dto.CreatedOn;
+                configuration.CreatedBy = dto.CreatedBy;
+                configuration.UpdateOn = dto.UpdateOn;
+                configuration.UpdateBy = dto.UpdateBy;
 
                 _database.UpdateConfiguration(configuration);
                 return Ok(configuration);

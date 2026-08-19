@@ -108,14 +108,15 @@ namespace MeuProxySsl.Controllers
                 if (user == null)
                     return NotFound();
 
-                user.Name = dto.Name ?? user.Name;
-                user.Username = dto.Username ?? user.Username;
-                user.Password = dto.Password ?? user.Password;
-                user.Email = dto.Email ?? user.Email;
-                user.MobilePhone = dto.MobilePhone ?? user.MobilePhone;
-                user.External_Id = dto.External_Id ?? user.External_Id;
-                user.Last_Login = dto.Last_Login ?? user.Last_Login;
-                user.IsActive = dto.IsActive ?? user.IsActive;
+                user.Name = dto.Name;
+                user.Username = dto.Username;
+                user.Password = dto.Password;
+                user.Email = dto.Email;
+                user.MobilePhone = dto.MobilePhone;
+                user.External_Id = dto.External_Id;
+                user.Creation_Date = dto.Creation_Date;
+                user.Last_Login = dto.Last_Login;
+                user.IsActive = dto.IsActive;
 
                 _database.UpdateUser(user);
                 return Ok(user);
