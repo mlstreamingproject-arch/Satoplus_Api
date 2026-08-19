@@ -276,6 +276,261 @@ Campos com valor `null` sao persistidos como `NULL`. Nenhum campo e preenchido a
 }
 ```
 
+## Respostas dos endpoints
+
+Os endpoints de update retornam `200 OK` com o registro completo depois da persistencia. O `Id` aparece na resposta porque e o identificador do registro, embora nao seja necessario no corpo da requisicao.
+
+### 1. Configuration - Response 200 OK
+
+```json
+{
+  "id": 1,
+  "name": "Nome da configuracao",
+  "description": "Descricao da configuracao",
+  "value": "Valor da configuracao",
+  "createdOn": "2026-08-18T00:00:00Z",
+  "createdBy": 1,
+  "updateOn": "2026-08-19T00:00:00Z",
+  "updateBy": 1
+}
+```
+
+### 2. EmailContent - Response 200 OK
+
+```json
+{
+  "id": 1,
+  "name": "Email de boas-vindas",
+  "tittle": "Titulo do email",
+  "greetings": "Ola, usuario",
+  "mainText": "Texto principal",
+  "secondaryText": "Texto secundario",
+  "auxiliarText": "Texto auxiliar",
+  "buttonText": "Acessar",
+  "link": "https://example.com",
+  "updateBy": 1,
+  "updateOn": "2026-08-19T00:00:00Z"
+}
+```
+
+### 3. PlataformType - Response 200 OK
+
+```json
+{
+  "id": "web",
+  "label": "Web",
+  "order": 1,
+  "isActive": true
+}
+```
+
+### 4. Position - Response 200 OK
+
+```json
+{
+  "id": 1,
+  "name": "Gerente",
+  "description": "Descricao da posicao",
+  "createdOn": "2026-08-18T00:00:00Z",
+  "createdBy": 1,
+  "updatedOn": "2026-08-19T00:00:00Z",
+  "updatedBy": 1,
+  "isActive": true
+}
+```
+
+### 5. Role - Response 200 OK
+
+```json
+{
+  "id": 1,
+  "name": "Administrador",
+  "persistent": true,
+  "ss_Key": "role-admin",
+  "espace_Id": 1,
+  "isActive": true,
+  "description": "Permissoes administrativas"
+}
+```
+
+### 6. UserRole - Response 200 OK
+
+```json
+{
+  "id": 1,
+  "user_Id": 1,
+  "role_Id": 1
+}
+```
+
+### 7. UserAccess - Response 200 OK
+
+```json
+{
+  "id": 1,
+  "userId": 1,
+  "userPerfilId": 1,
+  "plataformTypeId": "web",
+  "ip": "192.168.0.10",
+  "createdOn": "2026-08-18T00:00:00Z"
+}
+```
+
+### 8. UserAvatar - Response 200 OK
+
+```json
+{
+  "id": 1,
+  "name": "Avatar principal",
+  "binaryData": "AAECAwQ=",
+  "isActive": true,
+  "description": "Imagem do avatar",
+  "createdOn": "2026-08-18T00:00:00Z",
+  "createdBy": 1,
+  "updatedOn": "2026-08-19T00:00:00Z",
+  "updatedBy": 1
+}
+```
+
+### 9. UserDevice - Response 200 OK
+
+```json
+{
+  "id": 1,
+  "version": "1.0.0",
+  "uuid": "device-uuid",
+  "serial": "serial-number",
+  "platform": "Android",
+  "model": "Model X",
+  "manufacturer": "Manufacturer",
+  "isVirtual": false,
+  "getCordova": "cordova-info",
+  "deviceType": "mobile",
+  "userId": 1,
+  "userInitialRegistrationToken": "registration-token"
+}
+```
+
+### 10. User - Response 200 OK
+
+```json
+{
+  "id": 1,
+  "name": "Nome do usuario",
+  "username": "usuario",
+  "password": "senha-ou-hash",
+  "email": "usuario@example.com",
+  "mobilePhone": "+55 11 99999-9999",
+  "external_Id": "external-001",
+  "creation_Date": "2026-08-18T00:00:00Z",
+  "last_Login": "2026-08-19T00:00:00Z",
+  "isActive": true
+}
+```
+
+### 11. UserInfo - Response 200 OK
+
+```json
+{
+  "id": 1,
+  "biography": "Biografia do usuario",
+  "createdOn": "2026-08-18T00:00:00Z",
+  "createdBy": 1,
+  "updatedOn": "2026-08-19T00:00:00Z",
+  "updatedBy": 1,
+  "isStatusEmail": true,
+  "hasStreamingAccount": false,
+  "isCollaborator": true,
+  "birthDate": "1990-01-15",
+  "country": "Brasil",
+  "countryCode": "BR",
+  "address": "Endereco do usuario"
+}
+```
+
+### 12. UserInitialRegistration - Response 200 OK
+
+```json
+{
+  "id": 1,
+  "status": true,
+  "email": "usuario@example.com",
+  "plataformTypeId": "web",
+  "ip": "192.168.0.10",
+  "token": "registration-token",
+  "createdOn": "2026-08-18T00:00:00Z",
+  "updateOn": "2026-08-19T00:00:00Z",
+  "regionName": "Sao Paulo",
+  "city": "Sao Paulo",
+  "country": "Brasil",
+  "v_OS": "Android 14",
+  "v_Browser": "Chrome",
+  "deeplink": "app://registration",
+  "password": "senha-ou-hash"
+}
+```
+
+### 13. UserPasswordRecovery - Response 200 OK
+
+```json
+{
+  "id": 1,
+  "userId": 1,
+  "createdOn": "2026-08-18T00:00:00Z",
+  "isValid": true
+}
+```
+
+### 14. UserPerfil - Response 200 OK
+
+```json
+{
+  "id": 1,
+  "userId": 1,
+  "isActive": true,
+  "name": "Perfil principal",
+  "userAvatarId": 1,
+  "isChild": false,
+  "isMain": true,
+  "createdOn": "2026-08-18T00:00:00Z",
+  "deletedOn": null
+}
+```
+
+### 15. UserPicture - Response 200 OK
+
+```json
+{
+  "id": 1,
+  "binaryData": "AAECAwQ=",
+  "name": "foto-perfil.jpg"
+}
+```
+
+### 16. UserPosition - Response 200 OK
+
+```json
+{
+  "id": 1,
+  "userId": 1,
+  "positionId": 1,
+  "createdOn": "2026-08-18T00:00:00Z",
+  "createdBy": 1,
+  "updatedOn": "2026-08-19T00:00:00Z",
+  "updatedBy": 1
+}
+```
+
+### 17. UserStatus - Response 200 OK
+
+```json
+{
+  "id": 1,
+  "isOnLine": true,
+  "updateOn": "2026-08-19T00:00:00Z"
+}
+```
+
 ## Regras de persistencia
 
 - Todos os campos acima sao enviados no corpo do `PUT`; somente `Id` fica fora do JSON e vai na rota.
