@@ -88,9 +88,9 @@ namespace MeuProxySsl.Controllers
                 if (plataform == null)
                     return NotFound();
 
-                plataform.Label = dto.Label ?? plataform.Label;
-                plataform.Order = dto.Order ?? plataform.Order;
-                plataform.IsActive = dto.IsActive ?? plataform.IsActive;
+                plataform.Label = dto.Label;
+                plataform.Order = dto.Order;
+                plataform.IsActive = dto.IsActive;
 
                 _database.UpdatePlataformType(plataform);
                 return Ok(plataform);

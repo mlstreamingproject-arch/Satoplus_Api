@@ -89,12 +89,12 @@ namespace MeuProxySsl.Controllers
                 if (role == null)
                     return NotFound();
 
-                role.Name = dto.Name ?? role.Name;
-                role.Persistent = dto.Persistent ?? role.Persistent;
-                role.SS_Key = dto.SS_Key ?? role.SS_Key;
-                role.Espace_Id = dto.Espace_Id ?? role.Espace_Id;
-                role.IsActive = dto.IsActive ?? role.IsActive;
-                role.Description = dto.Description ?? role.Description;
+                role.Name = dto.Name;
+                role.Persistent = dto.Persistent;
+                role.SS_Key = dto.SS_Key;
+                role.Espace_Id = dto.Espace_Id;
+                role.IsActive = dto.IsActive;
+                role.Description = dto.Description;
 
                 _database.UpdateRole(role);
                 return Ok(role);

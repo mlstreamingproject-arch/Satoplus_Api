@@ -89,10 +89,12 @@ namespace MeuProxySsl.Controllers
                 if (userPosition == null)
                     return NotFound();
 
-                userPosition.UserId = dto.UserId ?? userPosition.UserId;
-                userPosition.PositionId = dto.PositionId ?? userPosition.PositionId;
-                userPosition.UpdatedOn = dto.UpdatedOn ?? DateTime.Now;
-                userPosition.UpdatedBy = dto.UpdatedBy ?? userPosition.UpdatedBy;
+                userPosition.UserId = dto.UserId;
+                userPosition.PositionId = dto.PositionId;
+                userPosition.CreatedOn = dto.CreatedOn;
+                userPosition.CreatedBy = dto.CreatedBy;
+                userPosition.UpdatedOn = dto.UpdatedOn;
+                userPosition.UpdatedBy = dto.UpdatedBy;
 
                 _database.UpdateUserPosition(userPosition);
                 return Ok(userPosition);

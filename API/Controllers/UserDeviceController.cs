@@ -94,17 +94,17 @@ namespace MeuProxySsl.Controllers
                 if (device == null)
                     return NotFound();
 
-                device.Version = dto.Version ?? device.Version;
-                device.UUID = dto.UUID ?? device.UUID;
-                device.Serial = dto.Serial ?? device.Serial;
-                device.Platform = dto.Platform ?? device.Platform;
-                device.Model = dto.Model ?? device.Model;
-                device.Manufacturer = dto.Manufacturer ?? device.Manufacturer;
-                device.IsVirtual = dto.IsVirtual ?? device.IsVirtual;
-                device.GetCordova = dto.GetCordova ?? device.GetCordova;
-                device.DeviceType = dto.DeviceType ?? device.DeviceType;
-                device.UserId = dto.UserId ?? device.UserId;
-                device.UserInitialRegistrationToken = dto.UserInitialRegistrationToken ?? device.UserInitialRegistrationToken;
+                device.Version = dto.Version;
+                device.UUID = dto.UUID;
+                device.Serial = dto.Serial;
+                device.Platform = dto.Platform;
+                device.Model = dto.Model;
+                device.Manufacturer = dto.Manufacturer;
+                device.IsVirtual = dto.IsVirtual;
+                device.GetCordova = dto.GetCordova;
+                device.DeviceType = dto.DeviceType;
+                device.UserId = dto.UserId;
+                device.UserInitialRegistrationToken = dto.UserInitialRegistrationToken;
 
                 _database.UpdateUserDevice(device);
                 return Ok(device);

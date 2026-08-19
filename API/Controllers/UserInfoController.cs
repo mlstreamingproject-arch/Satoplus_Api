@@ -95,16 +95,18 @@ namespace MeuProxySsl.Controllers
                 if (info == null)
                     return NotFound();
 
-                info.Biography = dto.Biography ?? info.Biography;
-                info.UpdatedOn = dto.UpdatedOn ?? DateTime.Now;
-                info.UpdatedBy = dto.UpdatedBy ?? info.UpdatedBy;
-                info.IsStatusEmail = dto.IsStatusEmail ?? info.IsStatusEmail;
-                info.HasStreamingAccount = dto.HasStreamingAccount ?? info.HasStreamingAccount;
-                info.IsCollaborator = dto.IsCollaborator ?? info.IsCollaborator;
-                info.BirthDate = dto.BirthDate ?? info.BirthDate;
-                info.Country = dto.Country ?? info.Country;
-                info.CountryCode = dto.CountryCode ?? info.CountryCode;
-                info.Address = dto.Address ?? info.Address;
+                info.Biography = dto.Biography;
+                info.CreatedOn = dto.CreatedOn;
+                info.CreatedBy = dto.CreatedBy;
+                info.UpdatedOn = dto.UpdatedOn;
+                info.UpdatedBy = dto.UpdatedBy;
+                info.IsStatusEmail = dto.IsStatusEmail;
+                info.HasStreamingAccount = dto.HasStreamingAccount;
+                info.IsCollaborator = dto.IsCollaborator;
+                info.BirthDate = dto.BirthDate;
+                info.Country = dto.Country;
+                info.CountryCode = dto.CountryCode;
+                info.Address = dto.Address;
 
                 _database.UpdateUserInfo(info);
                 return Ok(info);

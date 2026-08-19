@@ -28,5 +28,6 @@ namespace MeuProxySsl.DTOs
         public long? UserPerfilId { get; set; }
         public string PlataformTypeId { get; set; }
         public string IP { get; set; }
+        public DateTime? CreatedOn { get; set; }
     }
 }

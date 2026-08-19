@@ -85,8 +85,8 @@ namespace MeuProxySsl.Controllers
                 if (userRole == null)
                     return NotFound();
 
-                userRole.User_Id = dto.User_Id ?? userRole.User_Id;
-                userRole.Role_Id = dto.Role_Id ?? userRole.Role_Id;
+                userRole.User_Id = dto.User_Id;
+                userRole.Role_Id = dto.Role_Id;
 
                 _database.UpdateUserRole(userRole);
                 return Ok(userRole);

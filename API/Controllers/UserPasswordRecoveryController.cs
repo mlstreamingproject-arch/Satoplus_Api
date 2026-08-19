@@ -86,8 +86,9 @@ namespace MeuProxySsl.Controllers
                 if (recovery == null)
                     return NotFound();
 
-                recovery.UserId = dto.UserId ?? recovery.UserId;
-                recovery.IsValid = dto.IsValid ?? recovery.IsValid;
+                recovery.UserId = dto.UserId;
+                recovery.CreatedOn = dto.CreatedOn;
+                recovery.IsValid = dto.IsValid;
 
                 _database.UpdateUserPasswordRecovery(recovery);
                 return Ok(recovery);

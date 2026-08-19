@@ -93,16 +93,16 @@ namespace MeuProxySsl.Controllers
                 if (emailContent == null)
                     return NotFound();
 
-                emailContent.Name = dto.Name ?? emailContent.Name;
-                emailContent.Tittle = dto.Tittle ?? emailContent.Tittle;
-                emailContent.Greetings = dto.Greetings ?? emailContent.Greetings;
-                emailContent.MainText = dto.MainText ?? emailContent.MainText;
-                emailContent.SecondaryText = dto.SecondaryText ?? emailContent.SecondaryText;
-                emailContent.AuxiliarText = dto.AuxiliarText ?? emailContent.AuxiliarText;
-                emailContent.ButtonText = dto.ButtonText ?? emailContent.ButtonText;
-                emailContent.Link = dto.Link ?? emailContent.Link;
-                emailContent.UpdateOn = dto.UpdateOn ?? DateTime.Now;
-                emailContent.UpdateBy = dto.UpdateBy ?? emailContent.UpdateBy;
+                emailContent.Name = dto.Name;
+                emailContent.Tittle = dto.Tittle;
+                emailContent.Greetings = dto.Greetings;
+                emailContent.MainText = dto.MainText;
+                emailContent.SecondaryText = dto.SecondaryText;
+                emailContent.AuxiliarText = dto.AuxiliarText;
+                emailContent.ButtonText = dto.ButtonText;
+                emailContent.Link = dto.Link;
+                emailContent.UpdateOn = dto.UpdateOn;
+                emailContent.UpdateBy = dto.UpdateBy;
 
                 _database.UpdateEmailContent(emailContent);
                 return Ok(emailContent);

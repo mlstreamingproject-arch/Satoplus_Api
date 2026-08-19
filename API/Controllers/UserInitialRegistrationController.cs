@@ -97,19 +97,20 @@ namespace MeuProxySsl.Controllers
                 if (registration == null)
                     return NotFound();
 
-                registration.Status = dto.Status ?? registration.Status;
-                registration.Email = dto.Email ?? registration.Email;
-                registration.PlataformTypeId = dto.PlataformTypeId ?? registration.PlataformTypeId;
-                registration.IP = dto.IP ?? registration.IP;
-                registration.Token = dto.Token ?? registration.Token;
-                registration.UpdateOn = dto.UpdateOn ?? DateTime.Now;
-                registration.RegionName = dto.RegionName ?? registration.RegionName;
-                registration.City = dto.City ?? registration.City;
-                registration.Country = dto.Country ?? registration.Country;
-                registration.V_OS = dto.V_OS ?? registration.V_OS;
-                registration.V_Browser = dto.V_Browser ?? registration.V_Browser;
-                registration.Deeplink = dto.Deeplink ?? registration.Deeplink;
-                registration.Password = dto.Password ?? registration.Password;
+                registration.Status = dto.Status;
+                registration.Email = dto.Email;
+                registration.PlataformTypeId = dto.PlataformTypeId;
+                registration.IP = dto.IP;
+                registration.Token = dto.Token;
+                registration.CreatedOn = dto.CreatedOn;
+                registration.UpdateOn = dto.UpdateOn;
+                registration.RegionName = dto.RegionName;
+                registration.City = dto.City;
+                registration.Country = dto.Country;
+                registration.V_OS = dto.V_OS;
+                registration.V_Browser = dto.V_Browser;
+                registration.Deeplink = dto.Deeplink;
+                registration.Password = dto.Password;
 
                 _database.UpdateUserInitialRegistration(registration);
                 return Ok(registration);
