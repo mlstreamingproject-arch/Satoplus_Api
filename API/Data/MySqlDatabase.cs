@@ -103,6 +103,66 @@ namespace MeuProxySsl.Data
             return rows;
         }
 
+        public bool TryCreateLoginToken(long userId, string model, string token)
+        {
+            const string query = @"INSERT INTO initialtokenlogin
+                (Token, UserId, Model, IsValidado, Status)
+                VALUES (@Token, @UserId, @Model, 0, 1)";
+
+            try
+            {
+                return ExecuteNonQuery(query,
+                    new MySqlParameter("@Token", token),
+                    new MySqlParameter("@UserId", userId),
+                    new MySqlParameter("@Model", (object)model ?? DBNull.Value)) == 1;
+            }
+            catch (MySqlException ex) when (ex.Number == 1062)
+            {
+                return false;
+            }
+        }
+
+        public Dictionary<string, object> ConsumeLoginToken(string token)
+        {
+            using (var connection = OpenConnection())
+            using (var transaction = connection.BeginTransaction())
+            using (var update = new MySqlCommand(@"UPDATE initialtokenlogin
+                SET Status = 0, IsValidado = 1, DateValidate = CURRENT_DATE
+                WHERE Token = @Token AND Status = 1 AND IsValidado = 0", connection, transaction))
+            {
+                update.Parameters.AddWithValue("@Token", token);
+                if (update.ExecuteNonQuery() != 1)
+                {
+                    transaction.Rollback();
+                    return null;
+                }
+
+                Dictionary<string, object> result;
+                using (var select = new MySqlCommand(@"SELECT UserId, Model
+                    FROM initialtokenlogin WHERE Token = @Token", connection, transaction))
+                {
+                    select.Parameters.AddWithValue("@Token", token);
+                    using (var reader = select.ExecuteReader())
+                    {
+                        if (!reader.Read())
+                        {
+                            transaction.Rollback();
+                            return null;
+                        }
+
+                        result = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase)
+                        {
+                            ["UserId"] = reader.IsDBNull(0) ? null : reader.GetValue(0),
+                            ["Model"] = reader.IsDBNull(1) ? null : reader.GetValue(1)
+                        };
+                    }
+                }
+
+                transaction.Commit();
+                return result;
+            }
+        }
+
         #region PlataformType CRUD
 
         public List<PlataformType> GetAllPlataformTypes()

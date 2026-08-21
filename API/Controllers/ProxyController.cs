@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Security.Authentication;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -20,6 +21,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using MeuProxySsl.Data;
+using MeuProxySsl.DTOs;
 using MeuProxySsl.Security;
 
 
@@ -329,6 +331,22 @@ namespace MeuProxySsl.Controllers
             return TimeSpan.FromHours(accessTokenHours);
         }
 
+        private static int GetMaxAccessTokenDays()
+        {
+            var maxDays = 30;
+            var raw = ConfigurationManager.AppSettings["JwtMaxAccessTokenDays"];
+            if (!string.IsNullOrWhiteSpace(raw) && int.TryParse(raw, out var parsed) && parsed > 0)
+                maxDays = parsed;
+            return maxDays;
+        }
+
+        private static TimeSpan GetAccessTokenLifetime(int? accessTokenDays)
+        {
+            return accessTokenDays.HasValue
+                ? TimeSpan.FromDays(accessTokenDays.Value)
+                : GetAccessTokenLifetime();
+        }
+
         private static TimeSpan GetRefreshTokenLifetime()
         {
             var refreshTokenDays = 7;
@@ -353,9 +371,42 @@ namespace MeuProxySsl.Controllers
             return new JwtSecurityTokenHandler().WriteToken(jwt);
         }
 
+        private static string CreateJwtToken(IEnumerable<Claim> claims, string audience, DateTime expiresAtUtc)
+        {
+            var secretKey = ConfigurationManager.AppSettings["JwtSecretKey"] ?? "defaultSecretKey";
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var jwt = new JwtSecurityToken(
+                issuer: "MeuProxySsl",
+                audience: audience,
+                claims: claims,
+                expires: expiresAtUtc,
+                signingCredentials: creds
+            );
+            return new JwtSecurityTokenHandler().WriteToken(jwt);
+        }
+
         private static bool IsRefreshToken(ClaimsPrincipal principal)
         {
             return principal?.FindFirst("tokenType")?.Value == "refresh";
+        }
+
+        private const string TvBoxTokenAlphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+        private static string GenerateTvBoxLoginToken()
+        {
+            var token = new char[6];
+            var bytes = new byte[token.Length];
+
+            using (var random = RandomNumberGenerator.Create())
+            {
+                random.GetBytes(bytes);
+            }
+
+            for (var index = 0; index < token.Length; index++)
+                token[index] = TvBoxTokenAlphabet[bytes[index] % TvBoxTokenAlphabet.Length];
+
+            return new string(token);
         }
 
         private ClaimsPrincipal ValidateJwtToken(string token, string validAudience = "TokuPlusApp")
@@ -396,6 +447,100 @@ namespace MeuProxySsl.Controllers
         }
 
         private readonly MySqlDatabase _db = new MySqlDatabase();
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("generateLoginToken")]
+        public IHttpActionResult GenerateLoginToken([FromBody] CreateInitialLoginTokenDto dto)
+        {
+            if (dto == null || dto.UserId <= 0)
+                return BadRequest("UserId is required");
+
+            try
+            {
+                for (var attempt = 0; attempt < 20; attempt++)
+                {
+                    var token = GenerateTvBoxLoginToken();
+                    if (_db.TryCreateLoginToken(dto.UserId, dto.Model, token))
+                    {
+                        return Ok(new
+                        {
+                            Token = token,
+                            UserId = dto.UserId,
+                            Model = dto.Model,
+                            ExpiresInMinutes = 5
+                        });
+                    }
+                }
+
+                return Content(HttpStatusCode.Conflict, "Não foi possível gerar um token único.");
+            }
+            catch (Exception ex)
+            {
+                SafeLog("tvbox_login_token_error.log", $"[{DateTime.UtcNow:o}] Token generation failed: {ex.GetType().Name}: {ex.Message}\n");
+                return Content(HttpStatusCode.InternalServerError, "Não foi possível gerar o token.");
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("validateLoginToken")]
+        public IHttpActionResult ValidateLoginToken([FromBody] ValidateInitialLoginTokenDto dto)
+        {
+            if (dto == null || string.IsNullOrWhiteSpace(dto.Token))
+                return BadRequest("Token is required");
+
+            var token = dto.Token.Trim().ToUpperInvariant();
+            if (token.Length != 6 || !Regex.IsMatch(token, "^[A-Z0-9]+$"))
+                return BadRequest("Token must contain exactly 6 alphanumeric characters");
+            if (dto.AccessTokenDays.HasValue && (dto.AccessTokenDays.Value < 1 || dto.AccessTokenDays.Value > GetMaxAccessTokenDays()))
+                return BadRequest($"AccessTokenDays must be between 1 and {GetMaxAccessTokenDays()}");
+
+            try
+            {
+                var login = _db.ConsumeLoginToken(token);
+                if (login == null || login["UserId"] == null)
+                    return Unauthorized();
+
+                var userId = Convert.ToInt64(login["UserId"]);
+                var model = login["Model"]?.ToString() ?? string.Empty;
+                var accessTokenLifetime = GetAccessTokenLifetime(dto.AccessTokenDays);
+                var accessTokenExpiresAt = DateTime.UtcNow.Add(accessTokenLifetime);
+                var refreshTokenExpiresAt = dto.AccessTokenDays.HasValue
+                    ? accessTokenExpiresAt
+                    : DateTime.UtcNow.Add(GetRefreshTokenLifetime());
+                var claims = new[]
+                {
+                    new Claim("userId", userId.ToString()),
+                    new Claim("model", model),
+                    dto.AccessTokenDays.HasValue ? new Claim("accessTokenDays", dto.AccessTokenDays.Value.ToString()) : null,
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                }.Where(claim => claim != null);
+
+                var accessToken = CreateJwtToken(claims, "TokuPlusApp", accessTokenExpiresAt);
+                var refreshToken = CreateJwtToken(
+                    claims.Concat(new[] { new Claim("tokenType", "refresh") }),
+                    "TokuPlusRefresh",
+                    refreshTokenExpiresAt);
+
+                return Ok(new
+                {
+                    AccessToken = accessToken,
+                    RefreshToken = refreshToken,
+                    UserId = userId,
+                    Model = model,
+                    ExpiresInSeconds = (int)Math.Max(0, (accessTokenExpiresAt - DateTime.UtcNow).TotalSeconds),
+                    AccessTokenExpiresAt = accessTokenExpiresAt.ToString("o"),
+                    RefreshTokenExpiresAt = refreshTokenExpiresAt.ToString("o")
+                });
+            }
+            catch (Exception ex)
+            {
+                var mysqlException = ex as MySql.Data.MySqlClient.MySqlException;
+                SafeLog("login_token_validation_error.log", $"[{DateTime.UtcNow:o}] Login token validation failed: {ex.GetType().Name}: {ex.Message}; MySqlNumber={mysqlException?.Number}; SqlState={mysqlException?.SqlState}\n");
+                return Content(HttpStatusCode.InternalServerError, "Não foi possível validar o token.");
+            }
+        }
 
         [HttpGet]
         [Route("~/test")]
@@ -2037,51 +2182,6 @@ namespace MeuProxySsl.Controllers
             }
         }
 
-
-        [AllowAnonymous]
-        [HttpGet]
-        [Route("refreshToken")]
-        public IHttpActionResult RefreshToken(string refreshToken)
-        {
-            // Refresh token deve ser passado via query string ?refreshToken=<refresh_token>.
-            // Este endpoint não exige token JWT no cabeçalho Authorization.
-            if (string.IsNullOrEmpty(refreshToken))
-                return Unauthorized();
-
-            var token = refreshToken;
-
-            var principal = ValidateJwtToken(token, "TokuPlusRefresh");
-            if (principal == null || !IsRefreshToken(principal))
-            {
-                return Unauthorized();
-            }
-
-            var userId = principal.FindFirst("userId")?.Value;
-            var userName = principal.FindFirst("userName")?.Value ?? string.Empty;
-            var validate = principal.FindFirst("validate")?.Value ?? string.Empty;
-
-            if (string.IsNullOrEmpty(userId))
-                return Unauthorized();
-
-            var claims = new[]
-            {
-                new Claim("userId", userId),
-                new Claim("userName", userName),
-                new Claim("validate", validate),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
-
-            var accessToken = CreateJwtToken(claims, "TokuPlusApp", GetAccessTokenLifetime());
-            var newRefreshToken = CreateJwtToken(claims.Concat(new[] { new Claim("tokenType", "refresh") }), "TokuPlusRefresh", GetRefreshTokenLifetime());
-
-            return Ok(new
-            {
-                AccessToken = accessToken,
-                RefreshToken = newRefreshToken,
-                ExpiresInSeconds = (int)GetAccessTokenLifetime().TotalSeconds
-            });
-        }
-
         [AllowAnonymous]
         [HttpPost]
         [Route("ensureValidToken")]
@@ -2103,11 +2203,33 @@ namespace MeuProxySsl.Controllers
                             var handler = new JwtSecurityTokenHandler();
                             var jwt = handler.ReadJwtToken(accessToken);
                             var seconds = (int)Math.Max(0, (jwt.ValidTo - DateTime.UtcNow).TotalSeconds);
-                            return Ok(new { AccessToken = accessToken, Refreshed = false, ExpiresInSeconds = seconds });
+                            var userId = principal.FindFirst("userId")?.Value;
+                            var model = principal.FindFirst("model")?.Value ?? string.Empty;
+                            return Ok(new
+                            {
+                                AccessToken = accessToken,
+                                RefreshToken = (string)null,
+                                UserId = userId,
+                                Model = model,
+                                ExpiresInSeconds = seconds,
+                                AccessTokenExpiresAt = jwt.ValidTo.ToUniversalTime().ToString("o"),
+                                RefreshTokenExpiresAt = (string)null,
+                                Refreshed = false
+                            });
                         }
                         catch
                         {
-                            return Ok(new { AccessToken = accessToken, Refreshed = false, ExpiresInSeconds = (int)GetAccessTokenLifetime().TotalSeconds });
+                            return Ok(new
+                            {
+                                AccessToken = accessToken,
+                                RefreshToken = (string)null,
+                                UserId = principal.FindFirst("userId")?.Value,
+                                Model = principal.FindFirst("model")?.Value ?? string.Empty,
+                                ExpiresInSeconds = (int)GetAccessTokenLifetime().TotalSeconds,
+                                AccessTokenExpiresAt = (string)null,
+                                RefreshTokenExpiresAt = (string)null,
+                                Refreshed = false
+                            });
                         }
                     }
                 }
@@ -2121,6 +2243,14 @@ namespace MeuProxySsl.Controllers
                         var userId = principal.FindFirst("userId")?.Value;
                         var userName = principal.FindFirst("userName")?.Value ?? string.Empty;
                         var validate = principal.FindFirst("validate")?.Value ?? string.Empty;
+                        int? accessTokenDays = null;
+                        var accessTokenDaysClaim = principal.FindFirst("accessTokenDays")?.Value;
+                        if (int.TryParse(accessTokenDaysClaim, out var parsedAccessTokenDays)
+                            && parsedAccessTokenDays >= 1
+                            && parsedAccessTokenDays <= GetMaxAccessTokenDays())
+                        {
+                            accessTokenDays = parsedAccessTokenDays;
+                        }
 
                         if (!string.IsNullOrEmpty(userId))
                         {
@@ -2129,17 +2259,27 @@ namespace MeuProxySsl.Controllers
                                 new Claim("userId", userId),
                                 new Claim("userName", userName),
                                 new Claim("validate", validate),
+                                accessTokenDays.HasValue ? new Claim("accessTokenDays", accessTokenDays.Value.ToString()) : null,
                                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-                            };
+                            }.Where(claim => claim != null);
 
-                            var newAccess = CreateJwtToken(claims, "TokuPlusApp", GetAccessTokenLifetime());
-                            var newRefresh = CreateJwtToken(claims.Concat(new[] { new Claim("tokenType", "refresh") }), "TokuPlusRefresh", GetRefreshTokenLifetime());
+                            var accessTokenLifetime = GetAccessTokenLifetime(accessTokenDays);
+                            var accessTokenExpiresAt = DateTime.UtcNow.Add(accessTokenLifetime);
+                            var refreshTokenExpiresAt = accessTokenDays.HasValue
+                                ? accessTokenExpiresAt
+                                : DateTime.UtcNow.Add(GetRefreshTokenLifetime());
+                            var newAccess = CreateJwtToken(claims, "TokuPlusApp", accessTokenExpiresAt);
+                            var newRefresh = CreateJwtToken(claims.Concat(new[] { new Claim("tokenType", "refresh") }), "TokuPlusRefresh", refreshTokenExpiresAt);
 
                             return Ok(new
                             {
                                 AccessToken = newAccess,
                                 RefreshToken = newRefresh,
-                                ExpiresInSeconds = (int)GetAccessTokenLifetime().TotalSeconds,
+                                UserId = userId,
+                                Model = principal.FindFirst("model")?.Value ?? string.Empty,
+                                ExpiresInSeconds = (int)Math.Max(0, (accessTokenExpiresAt - DateTime.UtcNow).TotalSeconds),
+                                AccessTokenExpiresAt = accessTokenExpiresAt.ToString("o"),
+                                RefreshTokenExpiresAt = refreshTokenExpiresAt.ToString("o"),
                                 Refreshed = true
                             });
                         }
