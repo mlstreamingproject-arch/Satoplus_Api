@@ -3,6 +3,7 @@ using System.Web.Http;
 using MeuProxySsl.DTOs;
 using MeuProxySsl.Models;
 using MeuProxySsl.Data;
+using MeuProxySsl.Security;
 
 namespace MeuProxySsl.Controllers
 {
@@ -48,6 +49,7 @@ namespace MeuProxySsl.Controllers
         // POST: api/configurations
         [HttpPost]
         [Route("createconfiguration")]
+        [JwtAuthorize]
         public IHttpActionResult Create([FromBody] CreateConfigurationDto dto)
         {
             try
@@ -79,6 +81,7 @@ namespace MeuProxySsl.Controllers
         // PUT: api/configurations/{id}
         [HttpPut]
         [Route("updateconfiguration/{id}")]
+        [JwtAuthorize]
         public IHttpActionResult Update(long id, [FromBody] UpdateConfigurationDto dto)
         {
             try

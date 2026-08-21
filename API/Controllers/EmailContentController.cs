@@ -3,6 +3,7 @@ using System.Web.Http;
 using MeuProxySsl.DTOs;
 using MeuProxySsl.Models;
 using MeuProxySsl.Data;
+using MeuProxySsl.Security;
 
 namespace MeuProxySsl.Controllers
 {
@@ -48,6 +49,7 @@ namespace MeuProxySsl.Controllers
         // POST: api/emailcontent
         [HttpPost]
         [Route("createemailcontent")]
+        [JwtAuthorize]
         public IHttpActionResult Create([FromBody] CreateEmailContentDto dto)
         {
             try
@@ -82,6 +84,7 @@ namespace MeuProxySsl.Controllers
         // PUT: api/emailcontent/{id}
         [HttpPut]
         [Route("updateemailcontent/{id}")]
+        [JwtAuthorize]
         public IHttpActionResult Update(long id, [FromBody] UpdateEmailContentDto dto)
         {
             try
